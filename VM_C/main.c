@@ -3,7 +3,7 @@
 # define NUM_REGS 32
 int regs[ NUM_REGS ];
 
-
+// Attention, il faut faire mettre un temps d execution pour les différntes instruction (1 cycle pour add, 1 pour mult, 100 pour load, ...)
 int prog[] = { 0x9c00043, 0x9c00043, 0x9c00043, 0x0000000 };//Lire les instructions qui arrivent en entrée (Les mettres en 32bits pour tester)
 int data[] = {15, 74, 56, 1, 0, 3, 4, 4, 5, 5};
 int pc = 0;
