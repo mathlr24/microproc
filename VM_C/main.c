@@ -1,10 +1,13 @@
 #include <stdio.h>
 
 # define NUM_REGS 32
+# define temps_horloge 1
 int regs[ NUM_REGS ];
 
 // Attention, il faut faire mettre un temps d execution pour les différntes instruction (1 cycle pour add, 1 pour mult, 100 pour load, ...)
 // Avec la façon actuelle de faire le code, il va suffir que rajouter un delay dans chaque fonction. 
+// Ou bien avec la fonction sleep. 
+// On peut définir un temps d'horloge avec le # define du début et faire en fonction. 
 
 
 
