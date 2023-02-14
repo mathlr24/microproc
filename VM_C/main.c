@@ -39,24 +39,31 @@ void decode(int mot) {
          o = (mot & 0x000003E0) >> 5;
     }
     int Rbeta = mot & 0x0000001F;
-    printf("La valeur de mon codeop est : ", codeop);
-    printf("La valeur de mon Ralpha est : ", Ralpha);
-    printf("La valeur de mon immo est : ", immo);
-    printf("La valeur de mon o est : ", o);
-    printf("La valeur de mon Rbeta est : ", Rbeta);
+    printf("La valeur de mon codeop est : %d", codeop);
+    printf("La valeur de mon Ralpha est :%d ", Ralpha);
+    printf("La valeur de mon immo est : %d", immo);
+    printf("La valeur de mon o est : %d", o);
+    printf("La valeur de mon Rbeta est :%d ", Rbeta);
 }
 
 int running = 1;
 
 void evaluate(){
     switch (codeop) {
-        case 0:
-            printf("halt\n");
+        case 0:                 // HALT     We stop the program
+            printf("HALT \n");
             running = 0;
             break;
-        case 1:
-            printf("ADD\n");
-
+        case 1:                 // ADD      We do an addition 
+            printf("ADD :\n");
+            if (immo == 1){
+                regs[Rbeta] = regs[Ralpha] + o;
+            }
+            else regs[Rbeta] = regs[Ralpha] + regs[o];
+            break;
+        case 2 :                //LOAD      We load the data in the reg    
+            printf("LOAD : \n");
+            regs[]
 
 
     }
@@ -65,7 +72,7 @@ void evaluate(){
 
 int main() {
     for (int i=0; i<31; i++){
-        printf("%d\n", regs[i]);
+        printf("R%d : %d\n", i, regs[i]);
     }
     return 0;
 }
