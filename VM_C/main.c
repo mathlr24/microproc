@@ -63,7 +63,7 @@ void evaluate(){
             break;
         case 2 :                //LOAD      We load the data in the reg    
             printf("LOAD : \n");
-            regs[]
+            regs[];
 
 
     }
