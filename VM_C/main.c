@@ -20,10 +20,18 @@ int fetch(){
 }
 
 
+void init_regs(){
+    for (int i = 0; i<32; i++){
+        regs[i] = i++;
+    }
+    return 0;
+}
+
 int codeop = 0;
 int Ralpha = 0;
 int immo = 0;
 int o=0;
+int Rbeta = 0;
 
 void decode(int mot) {
 
@@ -38,12 +46,12 @@ void decode(int mot) {
     else {
          o = (mot & 0x000003E0) >> 5;
     }
-    int Rbeta = mot & 0x0000001F;
-    printf("La valeur de mon codeop est : %d", codeop);
-    printf("La valeur de mon Ralpha est :%d ", Ralpha);
-    printf("La valeur de mon immo est : %d", immo);
-    printf("La valeur de mon o est : %d", o);
-    printf("La valeur de mon Rbeta est :%d ", Rbeta);
+    Rbeta = mot & 0x0000001F;
+    printf("La valeur de mon codeop est : %d\n", codeop);
+    printf("La valeur de mon Ralpha est :%d \n", Ralpha);
+    printf("La valeur de mon immo est : %d\n", immo);
+    printf("La valeur de mon o est : %d\n", o);
+    printf("La valeur de mon Rbeta est :%d \n", Rbeta);
 }
 
 int running = 1;
@@ -55,7 +63,7 @@ void evaluate(){
             running = 0;
             break;
         case 1:                 // ADD      We do an addition 
-            printf("ADD :\n");
+            printf("Addtion :\n");
             if (immo == 1){
                 regs[Rbeta] = regs[Ralpha] + o;
             }
@@ -63,7 +71,8 @@ void evaluate(){
             break;
         case 2 :                //LOAD      We load the data in the reg    
             printf("LOAD : \n");
-            regs[];
+            //regs[]
+            break;
 
 
     }
@@ -71,8 +80,18 @@ void evaluate(){
 }
 
 int main() {
+    init_regs();
     for (int i=0; i<31; i++){
-        printf("R%d : %d\n", i, regs[i]);
+        printf("R%d : %d  ", i, regs[i]);
     }
+    regs[2] = 2;
+    regs[3] = 4;
+    int mot = 0x08800064;
+    decode(mot);
+    evaluate();
+    for (int i=0; i<31; i++){
+        printf("R%d : %d  ", i, regs[i]);
+    }
+    
     return 0;
 }
