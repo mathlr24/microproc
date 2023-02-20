@@ -3,15 +3,9 @@
 
 # define NUM_REGS 32
 # define temps_horloge 1
+
+
 int regs[ NUM_REGS ];
-
-// Attention, il faut faire mettre un temps d execution pour les différntes instruction (1 cycle pour add, 1 pour mult, 100 pour load, ...)
-// Avec la façon actuelle de faire le code, il va suffir que rajouter un delay dans chaque fonction. 
-// Ou bien avec la fonction sleep. 
-// On peut définir un temps d'horloge avec le # define du début et faire en fonction. 
-
-
-
 int prog[] = { 0x08000022, 0x08400043, 0x20e00044,0x08000081, 0x0000000 };//Lire les instructions qui arrivent en entrée (Les mettres en 32bits pour tester)
 int data[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31};
 int pc = 0;
