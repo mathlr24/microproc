@@ -246,7 +246,7 @@ void evaluate(){
             }
             else {
                 regs[Rbeta] = (regs[Ralpha] <= regs[o]) ? 1 : 0;
-                printf("Set lower equal : R%d and R%d in R%d\n", Ralpha, o), Rbeta;
+                printf("Set lower equal : R%d and R%d in R%d\n", Ralpha, o, Rbeta);
             }
             clock_rate++;
             break;
@@ -258,7 +258,7 @@ void evaluate(){
             }
             else {
                 regs[Rbeta] = (regs[Ralpha] == regs[o]) ? 1 : 0;
-                printf("Set equal : R%d and R%d in R%d\n", Ralpha, o), Rbeta;
+                printf("Set equal : R%d and R%d in R%d\n", Ralpha, o, Rbeta);
             }
             clock_rate++;
             break;
@@ -273,7 +273,7 @@ void evaluate(){
         case 13:                // load
             if (immo == 1){
                 regs[Rbeta] = data[ o + regs[Ralpha]];
-                
+
             }
             else{
                 regs[Rbeta] = data[regs[o] + regs[Ralpha]];
@@ -331,7 +331,7 @@ void run(){
         view_regs();
     }
     view_regs();
-    printf("Number of clock_rate : %d", clock_rate);
+    printf("Number of clock_rate : %ld", clock_rate);
 }
 
 int main() {
