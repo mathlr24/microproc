@@ -1,0 +1,4 @@
+add r0, r1, r2
+add r1, r2, r3
+div r3, 2, r4
+add r0, r4, r1
