@@ -25,8 +25,8 @@
 # define BRANZ 17
 # define SCALL 18
 
-# define nb_max 10000000
-# define nb_max -10000000
+# define nb_max 2147483647
+# define nb_max -2147483648
 
 
 
