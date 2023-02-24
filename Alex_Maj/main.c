@@ -5,6 +5,26 @@
 
 # define NUM_REGS 32
 # define temps_horloge 1
+# define STOP 0
+# define ADD 1
+# define SUB 2
+# define MUL 3
+# define DIV 4
+# define AND 5
+# define OR 6 
+# define XOR 7
+# define SHL 8
+# define SHR 9
+# define SLT 10 
+# define SLE 11
+# define SEQ 12
+# define LOAD 13
+# define STORE 14
+# define JMP 15 
+# define BRAZ 16
+# define BRANZ 17
+# define SCALL 18
+
 
 
 int regs[ NUM_REGS ];
@@ -35,6 +55,11 @@ void affichageListeData() {
     }
 }
 
+void error_number(result){
+    if (result > nb_max || result < nb_min){
+        printf("The number is out of range\n");
+    }
+}
 
 int pc = 0;
 long int clock_rate = 0;
@@ -53,7 +78,7 @@ void set_regs(){
 
 void view_regs(){
     for (int i=0; i<32; i++){
-        printf("R%d : %04X ", i, regs[i]);
+        printf("R%d : %d ", i, regs[i]);
     }
     printf("\n");
 }
@@ -122,7 +147,7 @@ void decode(int mot) {
 
 void evaluate(){
     switch (codeop) {
-        case 0:                 // HALT     We stop the program
+        case STOP:                 // HALT     We stop the program
             printf("HALT, end of the program\n");
             running = 0;
             break;
@@ -134,7 +159,7 @@ void evaluate(){
                     //------------------------------------------------//
 
 
-        case 1:                 // ADD      We do an addition 
+        case ADD:                 // ADD      We do an addition 
             if (immo == 1){
                 regs[Rbeta] = regs[Ralpha] + o;
                 printf("Addition : R%d and %d in R%d\n", Ralpha, o, Rbeta);
@@ -147,7 +172,7 @@ void evaluate(){
             clock_rate++;
             break;
             
-        case 2:                 // Sub      We do a subtraction 
+        case SUB:                 // Sub      We do a subtraction 
             if (immo == 1){
                 regs[Rbeta] = regs[Ralpha] - o;
                 printf("Subtraction : R%d and %d in R%d\n", Ralpha, o, Rbeta);
@@ -159,7 +184,7 @@ void evaluate(){
             clock_rate++;
             break;
 
-        case 3:                // Mul      We do a multiplication
+        case MUL:                // Mul      We do a multiplication
             if (immo == 1){
                 regs[Rbeta] = regs[Ralpha] * o;
                 printf("Multiplication : R%d and %d in R%d\n", Ralpha, o, Rbeta);
@@ -171,7 +196,7 @@ void evaluate(){
             clock_rate+=2;
             break;
 
-        case 4:                // Div      We do a division
+        case DIV:                // Div      We do a division
             if (immo == 1){
                 regs[Rbeta] = regs[Ralpha] / o;
                 printf("Division : R%d by %d in R%d\n", Ralpha, o, Rbeta);
@@ -183,7 +208,7 @@ void evaluate(){
             clock_rate+=2;
             break;
 
-        case 5:                // And      We do the AND gate
+        case AND:                // And      We do the AND gate
             if (immo == 1){
                 regs[Rbeta] = regs[Ralpha] & o;
                 printf("And gate : R%d and %d in R%d\n", Ralpha, o, Rbeta);
@@ -195,7 +220,7 @@ void evaluate(){
             clock_rate++;
             break;
 
-        case 6:                // Or      We do the OR gate
+        case OR:                // Or      We do the OR gate
             if (immo == 1){
                 regs[Rbeta] = regs[Ralpha] | o;
                 printf("Or gate : R%d and %d in R%d\n", Ralpha, o, Rbeta);
@@ -207,10 +232,10 @@ void evaluate(){
             clock_rate++;
             break;
 
-        case 7:                // exclusive OR      We do an exclusive OR gate
+        case XOR:                // exclusive OR      We do an exclusive OR gate
             if (immo == 1){
                 regs[Rbeta] = regs[Ralpha] ^ o;
-                printf("Exclusive Or : R%d and %d in R%d\n", Ralpha, o, Rbeta);
+                printf("Exclusive Or (XOR): R%d and %d in R%d\n", Ralpha, o, Rbeta);
             }
             else {
                 regs[Rbeta] = regs[Ralpha] ^ regs[o];
@@ -219,7 +244,7 @@ void evaluate(){
             clock_rate++;
             break;
 
-        case 8:                // shl      We do a left shift
+        case SHL:                // shl      We do a left shift
             if (immo == 1){
                 regs[Rbeta] = regs[Ralpha] << o;
                 printf("Left shift : R%d and %d in R%d\n", Ralpha, o, Rbeta);
@@ -231,7 +256,7 @@ void evaluate(){
             clock_rate++;
             break;
 
-        case 9:                // shr      We do a right shift
+        case SHR:                // shr      We do a right shift
             if (immo == 1){
                 regs[Rbeta] = regs[Ralpha] >> o;
                 printf("Right shift : R%d and %d in R%d\n", Ralpha, o, Rbeta);
@@ -249,7 +274,7 @@ void evaluate(){
                     //-------------------------------------------------------//
                     
 
-        case 10:                // slt      We look for 'set lower than'
+        case SLT:                // slt      We look for 'set lower than'
             if (immo == 1){
                 regs[Rbeta] = (regs[Ralpha] < o) ? 1 : 0;
                 printf("Set lower than : R%d and %d in R%d\n", Ralpha, o, Rbeta);
@@ -261,7 +286,7 @@ void evaluate(){
             clock_rate++;
             break;
         
-        case 11:                // sle      We look for 'set lower equal'
+        case SLE:                // sle      We look for 'set lower equal'
             if (immo == 1){
                 regs[Rbeta] = (regs[Ralpha] <= o) ? 1 : 0;
                 printf("Set lower equal : R%d and %d in R%d\n", Ralpha, o, Rbeta);
@@ -273,7 +298,7 @@ void evaluate(){
             clock_rate++;
             break;
 
-        case 12:                // seq      We look for 'set equal'
+        case SEQ:                // seq      We look for 'set equal'
             if (immo == 1){
                 regs[Rbeta] = (regs[Ralpha] == o) ? 1 : 0;
                 printf("Set equal : R%d and %d in R%d\n", Ralpha, o, Rbeta);
@@ -292,7 +317,7 @@ void evaluate(){
                     //----------------                         ---------------//
                     //--------------------------------------------------------//
         
-        case 13:                // load
+        case LOAD:                // load
             if (immo == 1){
                 regs[Rbeta] = data[ o + regs[Ralpha]];
                 printf("LOAD : load of value %d in R%d\n", data[ o + regs[Ralpha]], Rbeta);
@@ -304,7 +329,7 @@ void evaluate(){
             }
             clock_rate+=100;
             break;
-        case 14:                // store
+        case STORE:                // store
             if (immo == 1){
                 data[o + regs[Ralpha]] = regs[Rbeta];
                 printf("STORE : Store of value of R%d in memory case : %d\n",Rbeta, o + regs[Ralpha]);
@@ -316,7 +341,8 @@ void evaluate(){
             }
             clock_rate +=100;
             break;
-        case 15:                // jmp
+            
+        case JMP:                // jmp
             if (immo == 0){
                 regs[Rbeta] = pc;
                 pc = regs[o];
@@ -329,19 +355,19 @@ void evaluate(){
             }
             break;
 
-        case 16:                // braz
+        case BRAZ:                // braz
             if (regs[Ralpha] == 0){
                 pc = a;
                 printf("BRAZ : braz to %d\n", a);
             }
             break;
-        case 17:                // branz
+        case BRANZ:                // branz
             if (regs[Ralpha] != 0){
                 pc = a;
                 printf("BRANZ : braz to %d\n", a);
             }
             break; 
-        case 18:                // scall
+        case SCALL:                // scall
             if (a==1){
 
             }
