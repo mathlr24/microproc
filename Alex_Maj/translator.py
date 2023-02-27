@@ -17,7 +17,7 @@ operandList={"add":1,"sub":2,"mul":3,"div":4,
              "stop":0}
 
 #Lecture du code ASM (voir schéma sur moodle)
-with open("assembleur.txt",'r') as instruFile: instruData=instruFile.read().split("\n")
+with open("example_moodle.txt",'r') as instruFile: instruData=instruFile.read().split("\n")
 
 labelList,posList,hexaList=[],[],[]
 
@@ -31,6 +31,7 @@ for data in instruData:
         labelList.append(currentLabel)
         posList.append(position)
 
+for data in instruData:
     if len(data)==0: continue #Pas de donnée : on skip
     while data[0]==' ' and len(data)>1: data=data[1:]
     if not data.split(' ')[0] in operandList: continue #Pas de keyword : on skip
@@ -42,21 +43,26 @@ for data in instruData:
         position+=1
         continue
 
+
     data=data.split(operand)[1]
     data=data.replace(' ','') #On supprime les espaces de la donnée
     if '#' in data: data=data[:data.index('#')] #On supprime les commentaires de la donnée
 
     values=data.split(",")
+    
+    
 
     if len(values)==2: #Si deux paramètres trouvés
-
+    
+    	
+	
         if not values[1][0]=='r' or not values[1][1:].isdigit(): #Si l'un des deux paramètres est un label
             val0,val1,val2=values[0],"0",'r'+str(posList[labelList.index(values[1])])
 
         else: val0,val1,val2="r0",values[0],values[1] #Sinon, traité comme un registre
 
     else: val0,val1,val2=values[0],values[1],values[2] #Si trois paramètres trouvés
-
+    
     b0 = operandList.get(operand,0) #5 premiers bits : opérande
     b1 = int(val0.split('r')[1]) #5 bits suivant : premier registre
     b2 = 0 #Bit suivant : par défaut à 0, mis à 1 si valeur immédiate
@@ -99,4 +105,3 @@ for hexa in hexaList:
 
 outputFileName = 'fichier_traduit.bin'
 output_hex_instructions(hexaIDlist,hexaList, outputFileName)
-
