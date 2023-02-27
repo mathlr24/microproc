@@ -11,22 +11,22 @@
 # define MUL 3
 # define DIV 4
 # define AND 5
-# define OR 6 
+# define OR 6
 # define XOR 7
 # define SHL 8
 # define SHR 9
-# define SLT 10 
+# define SLT 10
 # define SLE 11
 # define SEQ 12
 # define LOAD 13
 # define STORE 14
-# define JMP 15 
+# define JMP 15
 # define BRAZ 16
 # define BRANZ 17
 # define SCALL 18
 
-# define nb_max 2147483647
-# define nb_max -2147483648
+# define nb_max 10000000
+# define nb_min -10000000
 
 
 
@@ -67,6 +67,7 @@ void error_number(result){
 int pc = 0;
 long int clock_rate = 0;
 int running = 1;
+int nb_scall = 0;
 
 int fetch(){
     return prog[ pc++ ];
@@ -162,20 +163,22 @@ void evaluate(){
                     //------------------------------------------------//
 
 
-        case ADD:                 // ADD      We do an addition 
+        case ADD:                 // ADD      We do an addition
             if (immo == 1){
                 regs[Rbeta] = regs[Ralpha] + o;
                 printf("Addition : R%d and %d in R%d\n", Ralpha, o, Rbeta);
+            
             }
 
             else {
                 regs[Rbeta] = regs[Ralpha] + regs[o];
                 printf("Addition : R%d and R%d in R%d\n", Ralpha, o, Rbeta);
             }
+            error_number(regs[Rbeta]);
             clock_rate++;
             break;
             
-        case SUB:                 // Sub      We do a subtraction 
+        case SUB:                 // Sub      We do a subtraction
             if (immo == 1){
                 regs[Rbeta] = regs[Ralpha] - o;
                 printf("Subtraction : R%d and %d in R%d\n", Ralpha, o, Rbeta);
@@ -286,7 +289,7 @@ void evaluate(){
                 regs[Rbeta] = (regs[Ralpha] < regs[o]) ? 1 : 0;
                 printf("Set lower than : R%d and R%d in R%d\n", Ralpha, o, Rbeta);
             }
-            clock_rate++;
+            clock_rate+=2;
             break;
         
         case SLE:                // sle      We look for 'set lower equal'
@@ -298,7 +301,7 @@ void evaluate(){
                 regs[Rbeta] = (regs[Ralpha] <= regs[o]) ? 1 : 0;
                 printf("Set lower equal : R%d and R%d in R%d\n", Ralpha, o, Rbeta);
             }
-            clock_rate++;
+            clock_rate+=2;
             break;
 
         case SEQ:                // seq      We look for 'set equal'
@@ -310,7 +313,7 @@ void evaluate(){
                 regs[Rbeta] = (regs[Ralpha] == regs[o]) ? 1 : 0;
                 printf("Set equal : R%d and R%d in R%d\n", Ralpha, o, Rbeta);
             }
-            clock_rate++;
+            clock_rate+=2;
             break;
 
 
@@ -356,6 +359,7 @@ void evaluate(){
                 pc = o;
                 printf("JMP : jump from %d to %d\n", pc, o);
             }
+            clock_rate+=2;
             break;
 
         case BRAZ:                // braz
@@ -369,15 +373,18 @@ void evaluate(){
                 pc = a;
                 printf("BRANZ : braz to %d\n", a);
             }
-            break; 
+            clock_rate+=2;
+            break;
         case SCALL:                // scall
             if (a==1){
-
+                printf("SCALL : ");
+                scanf("%d\n", &nb_scall);
             }
             if (a==0){
                 printf("La veleur comprises dans R1 est : %d", regs[1]);
             }
-            break;   
+            clock_rate+=2;
+            break;
        
 
     }
@@ -428,12 +435,7 @@ void affichageMemoireStockee(){
 
 
 
-
-
-
 int main(int argc, char *argv[]) {
-
-   
     if (argc != 3) {
         printf("Usage: %s <filename1> <filename2>\n", argv[0]);
         return 1;
@@ -456,10 +458,10 @@ int main(int argc, char *argv[]) {
     
     insertionMemoire(fp1,fp2);
     affichageMemoireStockee();
-    run();
 
+    run();
+    
     fclose(fp1);
     fclose(fp2);
     return 0;
 }
-
