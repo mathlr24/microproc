@@ -74,11 +74,18 @@ for data in instruData:
     b2 = 0 #Bit suivant : par défaut à 0, mis à 1 si valeur immédiate
 
     if 'r' in val1: b3=int(val1.split('r')[1]) #5 bits suivants : traités comme deuxième registre
+   
     else:
-        if len(values)==3: b2=1
-        b3=int(val1) #5 bits suivants : traités comme valeur immédiate
+        if val1.isdigit(): b3=int(val1)
+        elif len(val1) == 1: b3=posList[labelList.index(val1)]
+        elif val1[0] == 'r' and val1[1:].isdigit(): b3=int(val1[1:])
+        else: b3=posList[labelList.index(val1)]
 
     b4 = int(val2.split('r')[1]) #5 bits suivants : troisième registre
+    
+    
+    
+    
 
     #Assemblage des différentes parties du code binaire
     codeop=decToBin(b0,5)
