@@ -1,3 +1,9 @@
+import sys
+
+if len(sys.argv) > 1:
+    inputFileName = sys.argv[1]
+    outputFileName = sys.argv[2]
+
 #Fonction de conversion décimal -> binaire
 def decToBin(decVal,nbBit): return (lambda x : ''.join(reversed([str((x >> i) & 1) for i in range(nbBit)])))(decVal)
 
@@ -17,7 +23,7 @@ operandList={"add":1,"sub":2,"mul":3,"div":4,
              "stop":0}
 
 #Lecture du code ASM (voir schéma sur moodle)
-with open("example_moodle.txt",'r') as instruFile: instruData=instruFile.read().split("\n")
+with open(inputFileName,'r') as instruFile: instruData=instruFile.read().split("\n")
 
 labelList,posList,hexaList=[],[],[]
 
@@ -103,5 +109,7 @@ for hexa in hexaList:
     decVal+=1
 
 
-outputFileName = 'fichier_traduit.bin'
+
+
+
 output_hex_instructions(hexaIDlist,hexaList, outputFileName)
