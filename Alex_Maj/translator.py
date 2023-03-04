@@ -3,16 +3,10 @@ import sys
 if len(sys.argv) > 1:
     inputFileName = sys.argv[1]
     outputFileName = sys.argv[2]
-
+    
+    
 #Fonction de conversion décimal -> binaire
 def decToBin(decVal,nbBit): return (lambda x : ''.join(reversed([str((x >> i) & 1) for i in range(nbBit)])))(decVal)
-
-
-def output_hex_instructions(hexaIDlist, hexInstructions, fileName):
-
-	outputFile = open(fileName, 'w')
-	for i in range(len(hexInstructions)):
-		outputFile.write(hexaIDlist[i]+' '+hexInstructions[i] + '\n')
 
 #Liste des keyword possibles
 operandList={"add":1,"sub":2,"mul":3,"div":4,
@@ -22,101 +16,117 @@ operandList={"add":1,"sub":2,"mul":3,"div":4,
              "braz":16,"branz":17,"scall":18,
              "stop":0}
 
-#Lecture du code ASM (voir schéma sur moodle)
+#Lecture du code ASM
 with open(inputFileName,'r') as instruFile: instruData=instruFile.read().split("\n")
 
-labelList,posList,hexaList=[],[],[]
-
+#Clean de chaque ligne et repérage de chaque label
 position=0
-#Lecture de chaque ligne
-for data in instruData:
+labelList,posList=[],[]
+for i in range(len(instruData)):
+    data=instruData[i]
+
+    if "#" in data: data=data.split("#")[0] #Si commentaire : on prend tout avant le marqueur
+    instruData[i] = data
+
+    #DETECTION DE LABEL
     if ':' in data: #label détecté
-        currentLabel=data.split(':')[0].replace(' ','')
-        data=data[data.index(':')+1:]
-        if '#' in currentLabel: continue #Le label est un commentaire : on skip
+        currentLabel=data.split(':')[0].replace(' ','') #Suppression de tous les espaces avant le marqueur
+        if '#' in currentLabel: break #Le label est un commentaire : on skip
         labelList.append(currentLabel)
         posList.append(position)
+        data=data.split(":")[1] #On prend l'instruction après le label si existe
+        instruData[i]=data
 
+    if len(data)==0: continue #Si plus de donnée : tchao bye bye
+
+    #DETECTION D'INSTRUCTION
+    while data[0]==" ": #Suppression de chaque espace avant premier caractère
+        data=data[1:]
+        if len(data)==0: break
+    instruData[i]=data
+    if len(data)<=1: continue #Si aucun mot trouvé : on passe à la suivante
+    if data.split(' ')[0] in operandList: position+=1 #Instruction trouvée : on compte une ligne
+
+for i in range(len(labelList)): print(labelList[i],"-",posList[i])
+
+instruData = [i for i in instruData if i!= ""] #Remove all empty lines remaining in the list
+
+hexaList=[]
 for data in instruData:
-    if len(data)==0: continue #Pas de donnée : on skip
-    while data[0]==' ' and len(data)>1: data=data[1:]
-    if not data.split(' ')[0] in operandList: continue #Pas de keyword : on skip
 
-    operand=data.split(' ')[0]
-
-    if operand=="stop": #Traitement cas particulier
-        hexaList.append("0x00000000")
-        position+=1
-        continue
-
-
-    data=data.split(operand)[1]
-    data=data.replace(' ','') #On supprime les espaces de la donnée
-    if '#' in data: data=data[:data.index('#')] #On supprime les commentaires de la donnée
-
-    values=data.split(",")
-    
-    
-
-    if len(values)==2: #Si deux paramètres trouvés
-    
-    	
-	
-        if not values[1][0]=='r' or not values[1][1:].isdigit(): #Si l'un des deux paramètres est un label
-            val0,val1,val2=values[0],"0",'r'+str(posList[labelList.index(values[1])])
-
-        else: val0,val1,val2="r0",values[0],values[1] #Sinon, traité comme un registre
-
-    else: val0,val1,val2=values[0],values[1],values[2] #Si trois paramètres trouvés
-    
-    b0 = operandList.get(operand,0) #5 premiers bits : opérande
-    b1 = int(val0.split('r')[1]) #5 bits suivant : premier registre
-    b2 = 0 #Bit suivant : par défaut à 0, mis à 1 si valeur immédiate
-
-    if 'r' in val1: b3=int(val1.split('r')[1]) #5 bits suivants : traités comme deuxième registre
-   
-    else:
-        if val1.isdigit(): b3=int(val1)
-        elif len(val1) == 1: b3=posList[labelList.index(val1)]
-        elif val1[0] == 'r' and val1[1:].isdigit(): b3=int(val1[1:])
-        else: b3=posList[labelList.index(val1)]
-
-    b4 = int(val2.split('r')[1]) #5 bits suivants : troisième registre
-    
-    
-    
-    
-
-    #Assemblage des différentes parties du code binaire
+    operand = data.split(" ")[0]
+    b0 = operandList.get(operand,0)
     codeop=decToBin(b0,5)
-    Ralpha=decToBin(b1,5)
-    imm=decToBin(b2,1)
-    val=decToBin(b3,16)
-    Rbeta=decToBin(b4,5)
 
-    #Code complet final + conversion en hexa
-    fullCode = codeop+Ralpha+imm+val+Rbeta
+    args = data.replace(operand, "").replace(" ","")
+    values=[]
+
+    if operand != "stop": values = args.split(",")
+    if operand == "stop": fullCode = decToBin(0,32)
+
+    elif operand == "scall":
+        #instr|            n
+        #00000|000000000000000000000000000
+        # b0  |            b1
+        b1 = int(values[0])
+        n=decToBin(b1,5),decToBin(b1,27)
+        fullCode=codeop+n
+
+    elif operand == "jmp":
+        #instr|i|         o           | R
+        #00000|0|000000000000000000000|00000
+        # b0  |b1|        b2          | b3
+        b1=1
+        if values[0] in labelList: b2=posList[labelList.index(values[0])]
+        elif values[0][0]!='r': b2=int(values[0])
+        else:
+            b2=int(values[0][1:])
+            b1=0
+        #b3 = int(values[1][1:])
+        imm,o,R=decToBin(b1,1),decToBin(b2,21),decToBin(b3,5)
+        fullCode=codeop+imm+o+R
+
+    elif operand in ["braz","branz"]:
+        #instr|  R  |        a
+        #00000|00000|0000000000000000000000
+        # b0  |  b1 |        b2
+        b1 = int(values[0][1:])
+        if values[1] in labelList: b2=posList[labelList.index(values[1])]
+        else: b2=int(values[1])
+        R,a=decToBin(b1,5),decToBin(b2,22)
+        fullCode=codeop+R+a
+
+    else:
+        #instr|rAlph|i|       o        |rBeta
+        #00000|00000|0|0000000000000000|00000
+        # b0  | b1  |b2|      b3       | b4
+        b1 = int(values[0][1:]) #First argument always a register
+        if values[1][0].lower()=='r': #If second argument register : not immediate value
+            b2=0
+            b3=int(values[1][1:])
+        else: #If second argument not register : immediate value
+            b2=1
+            b3=int(values[1])
+        b4=int(values[2][1:]) #Third argument always a register
+
+        Ralpha,imm,o,Rbeta=decToBin(b1,5),decToBin(b2,1),decToBin(b3,16),decToBin(b4,5)
+        fullCode=codeop+Ralpha+imm+o+Rbeta
+
     hexaCode = hex(int(fullCode,2))
     while len(hexaCode)<10: hexaCode="0x"+"0"+hexaCode[2:]
 
     #Ligne ajoutée avec succès
     hexaList.append(hexaCode)
-    position+=1
-
-
 
 #Affichage des valeurs finales (contenues dans hexaList) :
 decVal=0
-hexaIDlist=[]
 for hexa in hexaList:
     hexaID=hex(decVal)
     while len(hexaID)<10: hexaID="0x"+"0"+hexaID[2:]
     print(hexaID,hexa)
-    hexaIDlist.append(hexaID)
     decVal+=1
 
-
-
-
-
-output_hex_instructions(hexaIDlist,hexaList, outputFileName)
+with open(outputFileName,'w') as binaryFile:
+    for i in range(len(hexaList)):
+        binaryFile.write(hexaList[i])
+        if i<len(hexaList)-1: binaryFile.write("\n")
