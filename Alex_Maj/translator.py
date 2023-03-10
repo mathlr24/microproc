@@ -69,7 +69,7 @@ for data in instruData:
         #00000|000000000000000000000000000
         # b0  |            b1
         b1 = int(values[0])
-        n=decToBin(b1,5),decToBin(b1,27)
+        n=decToBin(b1,27)
         fullCode=codeop+n
 
     elif operand == "jmp":
@@ -82,7 +82,7 @@ for data in instruData:
         else:
             b2=int(values[0][1:])
             b1=0
-        #b3 = int(values[1][1:])
+        b3 = int(values[1][1:])
         imm,o,R=decToBin(b1,1),decToBin(b2,21),decToBin(b3,5)
         fullCode=codeop+imm+o+R
 
@@ -107,7 +107,11 @@ for data in instruData:
         else: #If second argument not register : immediate value
             b2=1
             b3=int(values[1])
-        b4=int(values[2][1:]) #Third argument always a register
+        if len(values)<=2:
+            valeur = 0
+        else :
+            valeur = int(values[2][1:])
+        b4=valeur #Third argument always a register
 
         Ralpha,imm,o,Rbeta=decToBin(b1,5),decToBin(b2,1),decToBin(b3,16),decToBin(b4,5)
         fullCode=codeop+Ralpha+imm+o+Rbeta
