@@ -59,16 +59,14 @@ void affichageListeData() {
     }
 }
 
-int error_number(result){
-    int value;              // Creation of a return value to know if the result is wrong or not
+int error_number(int result){
     if (result > nb_max || result < nb_min){
         printf("The number is out of range\n");
-        value = 1;
+        return 1;
     }
     else {
-        value = 0; 
+        return 0;
     }
-    return 0;
 }
 
 int pc = 0;
