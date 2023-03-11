@@ -68,4 +68,37 @@ First, we wanted to show that all the instructions were well coded. To do this, 
 
 ## How to use our code 🛠️
 
-In out folder you will find 
+We have chosen to organize our files by family and by language. That is why you will find 4 folders and 1 .txt file. 
+
+The first folder is where the python assembler program is. The second is the folder where the VM called ISS is located. The third one is the storage. There you will find the binary files. The fourth folder is where the test codes are. Finally, the last folder will be the executive file.
+
+Here is a picture of the folder you will have. 
+
+<img width="538" alt="Capture d’écran 2023-03-11 à 23 18 29" src="https://user-images.githubusercontent.com/125263698/224513872-ebe09ca5-37d7-4fc7-b8e1-ee1a46ea1f84.png">
+
+HOW TO USE THE LAUNCH_APP.SH FILE ? 
+
+There is what you have in this file : 
+
+
+```console
+#!/bin/bash
+
+#Compilation of the python code. The first parameter is the name of the python code, 
+#then the name of the assembly code to be tested and finally the .bin file where to write the instructions. 
+python3 assembler_code/translator.py tests_codes/assembleur.txt storage/fichier_traduit.bin
+
+#Compilation of the VM in C 
+gcc -o VM_in_c/ISS VM_in_c/ISS.c
+
+#Execution of the VM. The first parameter is the name of the VM executable. The second is the name 
+#of the .bin file with instructions and the last is the .bin file with data.
+./VM_in_c/ISS storage/fichier_traduit.bin storage/data.bin
+```
+
+First you have the line to compile and execute the python file. After that you have the line to compile the C program and to finish you have the line to execute the C file. 
+
+You can modify the assembler code called "tests_codes/assembleur.txt" to change the test code. 
+
+
+
