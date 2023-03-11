@@ -98,7 +98,205 @@ gcc -o VM_in_c/ISS VM_in_c/ISS.c
 
 First you have the line to compile and execute the python file. After that you have the line to compile the C program and to finish you have the line to execute the C file. 
 
-You can modify the assembler code called "tests_codes/assembleur.txt" to change the test code. 
+You can modify the assembler code called "tests_codes/assembleur.txt" to change the test code.
+
+
+## Assembler program description 📝
+
+code 
+
+## VM in C program description 🔖
+This is the part where we will describe the C code. 
+
+All the code has been commented out, so we won't describe every line. The goal here is to take the main functions and explain what they do.
+
+First of all, as we said before, the first thing to do is read the file "traduced_file". It is in this file, that we have all the binary instructions. 
+
+
+JE TE LAISSE EXPLIQUER CETTE PARTIE JE NE LA COMPREND PAS BIEN. 
+L'intérêt à mon sens c'est simplement de dire ce que tu fais grossièrement pour lire les instructions et les mettre dans le tableau prog[]. 
+
+
+Once the instructions are arranged in the table, we must now decode them. To do that, we have used the diagram proposed by the teacher. 
+
+Not all the instrcutions have the same way be decoded. That is why we divided them. The only one thing that is always the same is the codeop. Indeed, this 5 bits are used to give the function that we should use after (add, sub, load, ...). 
+
+To retrieve this data, the first thing to do is to put all the bits not considering by codeop at 0. To do that we use a logical and with 0 for them. By doing it, no matter the value of the bit, x & 0 will always be equal to 0 in our case. For the bites of codeop we also do an logical and but with and. Like we can this on this table. 
+
+![FOJNhRnXwAk9lei](https://user-images.githubusercontent.com/125263698/224515248-10de4c9b-daf4-430b-b37f-0b7e0d62bb31.png)
+
+Now we have all the bite at 0 except the bite of the opcode. We can do a shift of 27 to the right to recover only the 5 bits of opcode. In the case of codeop we don't really need to put de 27 lasts bits to 0 but it is better to understand what we've done. 
+
+Here is the code of the "decoding" function. We do the same reasoning as codeop for all other information with adaptations. 
+
+```c
+void decode(int mot) {
+
+    codeop = (mot & 0xF8000000) >> 27;
+
+
+                    //-----------------------------------------------//
+                    //----------------                ---------------//
+                    //--------------- NORMAL DECODING ---------------//
+                    //----------------                ---------------//
+                    //-----------------------------------------------//
+                    //ADD SUB MUL DIV AND OR XOR SHL SHR SLT SLE SEQ //
+                    //------------------ LOAD STORE -----------------//
+                    //-----------------------------------------------//
+
+    //We have to decode differently dipending on the opcode, we are testing the opcode to know the way to decode after
+
+    if (codeop == 1 || codeop == 2 || codeop == 3 || codeop == 4 || codeop == 5 || codeop == 6 || codeop == 7 || codeop == 8 || codeop == 9 || codeop == 10 || codeop == 11 || codeop == 12 || codeop == 13 || codeop == 14){
+        Ralpha = (mot & 0x07C00000) >> 22;
+        immo = (mot & 0x00200000) >> 21;
+        if (immo == 1)
+        {
+            o = (mot & 0x001FFFE0) >> 5;
+        }
+        else {
+            o = (mot & 0x000003E0) >> 5;
+        }
+        Rbeta = mot & 0x0000001F;
+    }
+                        
+                    //--------------------------------------------//
+                    //---------------              ---------------//
+                    //--------------- JMP DECODING ---------------//
+                    //---------------              ---------------//
+                    //--------------------------------------------//
+    else if (codeop == 15)
+    {
+        Ralpha = (mot & 0x07C00000) >> 22;
+        immo = (mot & 0x04000000) >> 26;
+        o = (mot & 0x03FFFFE0) >> 5;
+        Rbeta = mot & 0x0000001F;
+    }
+                    //-------------------------------------------------------//
+                    //---------------                         ---------------//
+                    //--------------- BRAZ AND BRANZ DECODING ---------------//
+                    //---------------                         ---------------//
+                    //-------------------------------------------------------//
+    else if (codeop == 16 || codeop == 17){
+        Ralpha = (mot & 0x07C00000) >> 22;
+        a = (mot & 0x00aFFFFF);
+    }
+    
+}
+```
+
+Now we have put all the instruction on a table. We have also decoded the first instruction. We can now apply it.
+All the instructions have approximatly the same execution. That is why we wanted only to explain the function add. 
+
+In the function add, in addtion to the codeop, we have the register alpha (the first data we want to add), the register beta (the register where we an to put the final result) and depending on whether we have an immediate number or a second register, we perform the appropriate addition.  
+Here is the code : 
+
+
+```c 
+void evaluate(){
+    switch (codeop) {
+        case STOP:                 // HALT     We stop the program
+            printf("HALT, end of the program\n");
+            running = 0;
+            break;
+
+                    //------------------------------------------------//
+                    //----------------                 ---------------//
+                    //--------------- BASICS FONCTIONS ---------------//
+                    //----------------                 ---------------//
+                    //------------------------------------------------//
+
+
+        case ADD:                 // ADD      We do an addition
+            if (immo == 1){
+                regs[Rbeta] = regs[Ralpha] + o;
+                if (error_number(regs[Rbeta])){
+                    regs[Rbeta] = regs[Ralpha] - o;
+                    
+                }
+                else {
+                    printf("Addition : R%d and %d in R%d\n", Ralpha, o, Rbeta);
+                }
+                clock_rate++;
+            }
+
+            else {
+                regs[Rbeta] = regs[Ralpha] + o;
+                if (error_number(regs[Rbeta])){
+                    regs[Rbeta] = regs[Ralpha] - o;
+                    
+                }
+                else {
+                    printf("Addition : R%d and R%d in R%d\n", Ralpha, o, Rbeta);
+                }
+                clock_rate++;
+            }
+            
+            break;
+            }
+```
+In this code, you could have seen that we call a function named error_number. The purpose of this function is to always test if the value we calculated is always lower than the maximum or higher than the minimum we have set before. If the result of the fonction is not out of range we put the result on the register. However, if it is, we don't put it on and we show and error message to say that the numer is out of range. 
+
+You may also have noticed that we have introduced a 'clock_rate' number. This number will be used at the end of the program to calculate the efficiency of our machine. 
+
+Once the addtion is done, we can go to the next instruction and do this again and again until we are done. 
+
+When we are done, we can now calculate de number of million operations per seconde. 
+
+To do this, we have created at the begining a long int named clock_rate. At every instruction we increment it depending on the size of the task. Here is what we do : 
+
+'add', 'sub', 'and', 'or', 'xor' count for one. 
+
+'mul', 'div', 'shl', 'shr', 'slt', 'sle, 'seq' count for two. 
+
+'jmp', 'braz', 'branz', 'scall' count for 10. 
+
+'load', 'store' count for 100. 
+
+When we are in the function 'run' that is the function to run the program, we use a counter of time to know how long it takes to do all the instructions. Here is the code of the function : 
+
+```c
+void run(){
+    clock_t debut, fin;             // Variables pour compter le nombres de millions d'execution par seconde. 
+    double duree;
+    debut = clock();
+    view_regs();
+    set_regs();
+    view_regs();
+    while (running)
+    {
+        int instr = fetch();
+        decode(instr);
+        evaluate();
+        view_regs();
+    }
+    fin = clock();
+    duree = (double)(fin - debut) / CLOCKS_PER_SEC;
+    double ops_par_sec = (double)clock_rate / duree; // Calcule les opérations par seconde
+    printf("Le programme a pris %.2f secondes et a effectue %ld operations.\n", duree, clock_rate);
+    printf("Number of clock_rate : %.2f\n", ops_par_sec);
+}
+```
+At the end we just have to divide the nomber of operations by the time to know the number of operations per secondes. 
+
+At the end, we show the registers and we end the program. 
+
+This marks the end of the explanations of our programs. As mentioned earlier, our programs are commented and therefore you will find more information in this last one in order to understand even better the tasks we perform. 
+
+
+## What can we learn from this project? 💼
+
+This is the first time we had an as huge project of programming. Since the class hours were not enough, we had to learn to work efficiently on our project at home. In order to achieve our maximum on this project we tried to apply the agile method. We organized 20 minutes meetings 2 to 3 times a week in order to set objectives and to help each other on certain points. It was therefore a good exercise for us to prepare ourselves even better for the professional world that awaits us. 
+
+Moreover, doing a collaborative project was a good excuse for us to learn how to use github. We had rarely had the opportunity to use this site before. It was therefore the opportunity to learn about this site and its use on the order line. 
+We also tried to comment our changes on our codes in order to be able to prepare a new one to the world of work. 
+We did not become experts of the platform, however we are now able to generate a git project, to add files, to delete them or even to modify them with the command lines in an easy way. 
+
+Concerning the English language, we have chosen to write the whole readme in English. We are both French and our preferred language is not English. However, in addition to being able to collaborate on this project, the interest for us to realize this project on git was that it could be used as a showcase for a potential new job later. 
+
+Therefore, we thought that using English could be a real plus for our project. Since we are both not completely bilingual, this also forced us to think in English about how to best explain our program and what we do in it. 
+
+Now that we have covered everything, this is the end of our project. We hope you have enjoyed our work. We hope to be able to start projects of this scope again soon. 
+
 
 
 
