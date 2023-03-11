@@ -4,6 +4,11 @@ if len(sys.argv) > 1:
     inputFileName = sys.argv[1]
     outputFileName = sys.argv[2]
     
+def output_hex_instructions(hexaIDlist, hexInstructions, fileName):
+    outputFile = open(fileName, 'w')
+    for i in range(len(hexInstructions)):
+        outputFile.write(hexaIDlist[i] + ' ' + hexInstructions[i] + '\n')
+    
     
 #Fonction de conversion décimal -> binaire
 def decToBin(decVal,nbBit): return (lambda x : ''.join(reversed([str((x >> i) & 1) for i in range(nbBit)])))(decVal)
@@ -124,13 +129,15 @@ for data in instruData:
 
 #Affichage des valeurs finales (contenues dans hexaList) :
 decVal=0
+listHexaID=[]
 for hexa in hexaList:
     hexaID=hex(decVal)
     while len(hexaID)<10: hexaID="0x"+"0"+hexaID[2:]
+    listHexaID.append(hexaID)
     print(hexaID,hexa)
     decVal+=1
+    
+    
+output_hex_instructions(listHexaID, hexaList, outputFileName)
 
-with open(outputFileName,'w') as binaryFile:
-    for i in range(len(hexaList)):
-        binaryFile.write(hexaList[i])
-        if i<len(hexaList)-1: binaryFile.write("\n")
+
