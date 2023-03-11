@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
 #define MAX_LIST_SIZE 1000
 
@@ -25,8 +26,8 @@
 # define BRANZ 17
 # define SCALL 18
 
-# define nb_max 10000000
-# define nb_min -10000000
+# define nb_max 2147483647
+# define nb_min -2147483648
 
 
 
@@ -58,9 +59,13 @@ void affichageListeData() {
     }
 }
 
-void error_number(result){
+int error_number(result){
     if (result > nb_max || result < nb_min){
         printf("The number is out of range\n");
+        return 1;
+    }
+    else {
+        return 0;
     }
 }
 
@@ -166,16 +171,28 @@ void evaluate(){
         case ADD:                 // ADD      We do an addition
             if (immo == 1){
                 regs[Rbeta] = regs[Ralpha] + o;
-                printf("Addition : R%d and %d in R%d\n", Ralpha, o, Rbeta);
-            
+                if (error_number(regs[Rbeta])){
+                    regs[Rbeta] = regs[Ralpha] - o;
+                    
+                }
+                else {
+                    printf("Addition : R%d and %d in R%d\n", Ralpha, o, Rbeta);
+                }
+                clock_rate++;
             }
 
             else {
-                regs[Rbeta] = regs[Ralpha] + regs[o];
-                printf("Addition : R%d and R%d in R%d\n", Ralpha, o, Rbeta);
+                regs[Rbeta] = regs[Ralpha] + o;
+                if (error_number(regs[Rbeta])){
+                    regs[Rbeta] = regs[Ralpha] - o;
+                    
+                }
+                else {
+                    printf("Addition : R%d and R%d in R%d\n", Ralpha, o, Rbeta);
+                }
+                clock_rate++;
             }
-            error_number(regs[Rbeta]);
-            clock_rate++;
+            
             break;
             
         case SUB:                 // Sub      We do a subtraction
@@ -392,6 +409,9 @@ void evaluate(){
 }
 
 void run(){
+    clock_t debut, fin;             // Variables pour compter le nombres de millions d'execution par seconde. 
+    double duree;
+    debut = clock();
     view_regs();
     set_regs();
     view_regs();
@@ -402,8 +422,11 @@ void run(){
         evaluate();
         view_regs();
     }
-    view_regs();
-    printf("Number of clock_rate : %ld", clock_rate);
+    fin = clock();
+    duree = (double)(fin - debut) / CLOCKS_PER_SEC;
+    double ops_par_sec = (double)clock_rate / duree; // Calcule les opérations par seconde
+    printf("Le programme a pris %.2f secondes et a effectue %ld operations.\n", duree, clock_rate);
+    printf("Number of clock_rate : %.2f\n", ops_par_sec);
 }
 
 
