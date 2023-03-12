@@ -1,0 +1,8 @@
+add r0, r2, r4
+add r1, r4, r6
+sub r2, r3, r9
+sub r23, 3, r6
+xor r23, r4, r6
+and r12, r4, r14
+
+
