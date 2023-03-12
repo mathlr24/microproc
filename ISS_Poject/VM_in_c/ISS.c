@@ -35,6 +35,7 @@ int regs[ NUM_REGS ];
 int prog[MAX_LIST_SIZE];
 int nodeCount1 = 0;
 int data[MAX_LIST_SIZE];
+int iDdata[NUM_REGS];
 int nodeCount2 = 0;
 
 void insertMemoireInstr(int elementProg) {
@@ -42,7 +43,8 @@ void insertMemoireInstr(int elementProg) {
     nodeCount1++;
 }
 
-void insertMemoireData(int elementData) {
+void insertMemoireData(unsigned int elementIDdata, unsigned int elementData) {
+    iDdata[nodeCount2] = elementIDdata;
     data[nodeCount2] = elementData;
     nodeCount2++;
 }
@@ -55,7 +57,7 @@ void affichageListeInstr() {
 
 void affichageListeData() {
     for (int i = 0; i < nodeCount2; i++) {
-        printf("0x%08x 0x%08x\n", i, data[i]);
+        printf("0x%08x 0x%08x\n", iDdata[i], data[i]);
     }
 }
 
@@ -80,9 +82,13 @@ int fetch(){
 
 
 void set_regs(){
-    for (int i=0; i<32; i++){
-        regs[i] = data[i];
-    }
+	for (int i=0; i<32; i++){
+        for(int j=0;j<32;j++){
+	        if (i == iDdata[j]){
+	            regs[i]=data[j];
+	        }
+        }
+   }
 }
 
 void view_regs(){
@@ -150,6 +156,9 @@ void decode(int mot) {
     else if (codeop == 16 || codeop == 17){
         Ralpha = (mot & 0x07C00000) >> 22;
         a = (mot & 0x00aFFFFF);
+    }
+    else if (codeop == 18){
+        a = (mot & 0x07FFFFFF);
     }
     
 }
@@ -571,10 +580,17 @@ void evaluate(){
         case SCALL:                // scall
             if (a==1){
                 printf("SCALL : ");
-                scanf("%d\n", &nb_scall);
+                scanf("%d", &nb_scall);
+                printf("Your value is : %d. \n", nb_scall);
+                break;
             }
             if (a==0){
-                printf("La veleur comprises dans R1 est : %d", regs[1]);
+                printf("La valeur comprises dans R1 est : %d\n", regs[1]);
+                break;
+            }
+            else{
+                printf("This value is not recognized. \n");
+                break;
             }
             clock_rate+=2;
             break;
@@ -606,21 +622,23 @@ void run(){
 }
 
 
-void insertionMemoire(FILE *fp1, FILE *fp2){
+void insertionMemoire(FILE *fp1, FILE *fp2) {
     int instr;
     int count = 0;
+     char line[100];
     while (fscanf(fp1, "%*s %x", &instr) == 1 && count < MAX_LIST_SIZE) {
         insertMemoireInstr(instr);
         count++;
     }
     
-    int data;
-    count = 0;
-    while (fscanf(fp2, "%*s %x", &data) == 1 && count < MAX_LIST_SIZE) {
-        insertMemoireData(data);
-        count++;
-    }
-
+    while (fgets(line, sizeof(line), fp2) != NULL && count < MAX_LIST_SIZE) {
+        int identifiantData;
+        int valueData;
+        if (sscanf(line, "0x%08x 0x%08x", &identifiantData, &valueData) == 2) { 
+            insertMemoireData(identifiantData,valueData);
+            count++;
+        }
+    }   
 }
 
 void affichageMemoireStockee(){
