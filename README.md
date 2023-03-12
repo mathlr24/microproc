@@ -100,7 +100,7 @@ First you have the line to compile and execute the python file. After that you h
 
 You can modify the assembler code called "tests_codes/assembleur.txt" to change the test code.
 
-##How to change the input data? 👨🏽‍🎨
+## How to change the input data? 👨🏽‍🎨
 
 If you want to, you can change the input data. On the folder "storage", you have the file data.bin. This file, has 2 parts. As you can see on this image : 
 
