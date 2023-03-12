@@ -59,7 +59,7 @@ void affichageListeData() {
     }
 }
 
-int error_number(int result){
+int error_number(long long int result){
     if (result > nb_max || result < nb_min){
         printf("The number is out of range\n");
         return 1;
@@ -99,6 +99,7 @@ int immo = 0;
 int o=0;
 int Rbeta = 0;
 int a =0;
+
 
 void decode(int mot) {
 
@@ -155,6 +156,7 @@ void decode(int mot) {
 
 
 void evaluate(){
+    long long int result_instr = 0;
     switch (codeop) {
         case STOP:                 // HALT     We stop the program
             printf("HALT, end of the program\n");
@@ -170,123 +172,230 @@ void evaluate(){
 
         case ADD:                 // ADD      We do an addition
             if (immo == 1){
-                regs[Rbeta] = regs[Ralpha] + o;
-                if (error_number(regs[Rbeta])){
-                    regs[Rbeta] = regs[Ralpha] - o;
-                    
+                
+                result_instr = (long long int)regs[Ralpha] + o;
+                if (error_number(result_instr)){
+                    printf("We can not do the addition\n");
                 }
                 else {
+                    regs[Rbeta] = result_instr;
                     printf("Addition : R%d and %d in R%d\n", Ralpha, o, Rbeta);
                 }
-                clock_rate++;
             }
 
             else {
-                regs[Rbeta] = regs[Ralpha] + o;
-                if (error_number(regs[Rbeta])){
-                    regs[Rbeta] = regs[Ralpha] - o;
+                result_instr = (long long int)regs[Ralpha] + regs[o];
+                if (error_number(result_instr)){
+                    printf("We can not do the addition\n");
                     
                 }
                 else {
+                    regs[Rbeta] = result_instr;
                     printf("Addition : R%d and R%d in R%d\n", Ralpha, o, Rbeta);
                 }
-                clock_rate++;
             }
-            
+            clock_rate++;
             break;
             
         case SUB:                 // Sub      We do a subtraction
             if (immo == 1){
-                regs[Rbeta] = regs[Ralpha] - o;
-                printf("Subtraction : R%d and %d in R%d\n", Ralpha, o, Rbeta);
+                result_instr = (long long int)regs[Ralpha] - o;
+                if (error_number(result_instr)){
+                    printf("We can not do the substraction\n");
+                }
+                else {
+                    regs[Rbeta] = result_instr;
+                    printf("Subtraction : R%d and %d in R%d\n", Ralpha, o, Rbeta);
+                }
             }
             else {
-                regs[Rbeta] = regs[Ralpha] - regs[o];
-                printf("Subtraction : R%d and R%d in R%d\n", Ralpha, o, Rbeta);
+                result_instr = (long long int)regs[Ralpha] - regs[o];
+                if (error_number(result_instr)){
+                    printf("We can not do the substraction\n");
+                }
+                else {
+                    regs[Rbeta] = result_instr;
+                    printf("Subtraction : R%d and R%d in R%d\n", Ralpha, o, Rbeta);
+                }
             }
             clock_rate++;
             break;
 
         case MUL:                // Mul      We do a multiplication
             if (immo == 1){
-                regs[Rbeta] = regs[Ralpha] * o;
-                printf("Multiplication : R%d and %d in R%d\n", Ralpha, o, Rbeta);
+                result_instr = (long long int)regs[Ralpha] * o;
+                if (error_number(result_instr)){
+                    printf("We can not do the multiplication.\n");
+                }
+                else {
+                    regs[Rbeta] = result_instr;
+                    printf("Multiplication : R%d and %d in R%d\n", Ralpha, o, Rbeta);
+                }
+                
             }
             else {
-                regs[Rbeta] = regs[Ralpha] * regs[o];
-                printf("Multiplication : R%d and R%d in R%d\n", Ralpha, o, Rbeta);
+                result_instr = (long long int)regs[Ralpha] * regs[o];
+                if (error_number(result_instr)){
+                    printf("We can not do the multiplication.\n");
+                }
+                else {
+                    regs[Rbeta] = result_instr;
+                    printf("Multiplication : R%d and R%d in R%d\n", Ralpha, o, Rbeta);
+                }            
             }
             clock_rate+=2;
             break;
 
         case DIV:                // Div      We do a division
             if (immo == 1){
-                regs[Rbeta] = regs[Ralpha] / o;
-                printf("Division : R%d by %d in R%d\n", Ralpha, o, Rbeta);
+                result_instr = (long long int)regs[Ralpha] / o;
+                if (error_number(result_instr)){
+                    printf("We can not do the division.\n");
+                }
+                else {
+                    regs[Rbeta] = result_instr;
+                    printf("Division : R%d by %d in R%d\n", Ralpha, o, Rbeta);
+                }
             }
             else {
-                regs[Rbeta] = regs[Ralpha] / regs[o];
-                printf("Division : R%d by R%d in R%d\n", Ralpha, o, Rbeta);
+                result_instr = (long long int)regs[Ralpha] / regs[o];
+                if (error_number(result_instr)){
+                    printf("We can not do the division.\n");
+                }
+                else {
+                    regs[Rbeta] = result_instr;
+                    printf("Division : R%d by R%d in R%d\n", Ralpha, o, Rbeta);
+                }
+                
             }
             clock_rate+=2;
             break;
 
         case AND:                // And      We do the AND gate
             if (immo == 1){
-                regs[Rbeta] = regs[Ralpha] & o;
-                printf("And gate : R%d and %d in R%d\n", Ralpha, o, Rbeta);
+                result_instr = (long long int)regs[Ralpha] & o;
+                if (error_number(result_instr)){
+                    printf("We can not do the and.\n");
+                }
+                else {
+                    regs[Rbeta] = result_instr;
+                    printf("And gate : R%d and %d in R%d\n", Ralpha, o, Rbeta);
+                } 
             }
             else {
-                regs[Rbeta] = regs[Ralpha] & regs[o];
-                printf("And gate : R%d and R%d in R%d\n", Ralpha, o, Rbeta);
+                result_instr = (long long int)regs[Ralpha] & regs[o];
+                if (error_number(result_instr)){
+                    printf("We can not do the and.\n");
+                }
+                else{
+                    regs[Rbeta] = result_instr;
+                    printf("And gate : R%d and R%d in R%d\n", Ralpha, o, Rbeta);
+                }
+                
             }
             clock_rate++;
             break;
 
         case OR:                // Or      We do the OR gate
             if (immo == 1){
-                regs[Rbeta] = regs[Ralpha] | o;
-                printf("Or gate : R%d and %d in R%d\n", Ralpha, o, Rbeta);
+                result_instr = (long long int)regs[Ralpha] | o;
+                if (error_number(result_instr)){
+                    printf("We can not do the or.\n");
+                }
+                else {
+                    regs[Rbeta] = result_instr;
+                    printf("Or gate : R%d and %d in R%d\n", Ralpha, o, Rbeta);
+                }
+                
             }
             else {
-                regs[Rbeta] = regs[Ralpha] | regs[o];
-                printf("Or gate : R%d and R%d in R%d\n", regs[Ralpha], o, Rbeta);
+                result_instr = (long long int)regs[Ralpha] | regs[o];
+                if (error_number(result_instr)){
+                    printf("We can not do the or.\n");
+                }
+                else {
+                    regs[Rbeta] = result_instr;
+                    printf("Or gate : R%d and R%d in R%d\n", regs[Ralpha], o, Rbeta);
+                }
+                
             }
             clock_rate++;
             break;
 
         case XOR:                // exclusive OR      We do an exclusive OR gate
             if (immo == 1){
-                regs[Rbeta] = regs[Ralpha] ^ o;
-                printf("Exclusive Or (XOR): R%d and %d in R%d\n", Ralpha, o, Rbeta);
+                result_instr = (long long int)regs[Ralpha] ^ o;
+                if (error_number(result_instr)){
+                    printf("We can not do the or.\n");
+                }
+                else{
+                    regs[Rbeta] = result_instr;
+                    printf("Exclusive Or (XOR): R%d and %d in R%d\n", Ralpha, o, Rbeta);
+                }
+                
             }
             else {
-                regs[Rbeta] = regs[Ralpha] ^ regs[o];
-                printf("Exclusive Or : R%d and R%d in R%d\n", Ralpha, o, Rbeta);
+                result_instr = (long long int)regs[Ralpha] ^ regs[o];
+                if (error_number(result_instr)){
+                    printf("We can not do the or.\n");
+                }
+                else{
+                    regs[Rbeta] = result_instr;
+                    printf("Exclusive Or : R%d and R%d in R%d\n", Ralpha, o, Rbeta);
+                }
+                
             }
             clock_rate++;
             break;
 
         case SHL:                // shl      We do a left shift
             if (immo == 1){
-                regs[Rbeta] = regs[Ralpha] << o;
-                printf("Left shift : R%d and %d in R%d\n", Ralpha, o, Rbeta);
+                result_instr = (long long int )regs[Ralpha] << o;
+                if (error_number(result_instr)){
+                    printf("We can not do a shl.\n");
+                }
+                else{
+                    regs[Rbeta] = result_instr;
+                    printf("Left shift : R%d and %d in R%d\n", Ralpha, o, Rbeta);   
+                }
+                
             }
             else {
-                regs[Rbeta] = regs[Ralpha] << regs[o];
-                printf("Left shift : R%d and R%d in R%d\n", Ralpha, o, Rbeta);
+                result_instr = (long long int)regs[Ralpha] << regs[o];
+                if (error_number(result_instr)){
+                    printf("We can not do a shl.\n");
+                }
+                else {
+                    regs[Rbeta] = result_instr;
+                    printf("Left shift : R%d and R%d in R%d\n", Ralpha, o, Rbeta);
+                }
+                
             }
             clock_rate++;
             break;
 
         case SHR:                // shr      We do a right shift
             if (immo == 1){
-                regs[Rbeta] = regs[Ralpha] >> o;
-                printf("Right shift : R%d and %d in R%d\n", Ralpha, o, Rbeta);
+                result_instr = (long long int)regs[Ralpha] >> o;
+                if (error_number(result_instr)){
+                    printf("We can not do a shr.\n");
+                }
+                else {
+                    regs[Rbeta] = result_instr;
+                    printf("Right shift : R%d and %d in R%d\n", Ralpha, o, Rbeta);
+                }
+                
             }
             else {
-                regs[Rbeta] = regs[Ralpha] >> regs[o];
+                result_instr = (long long int)regs[Ralpha] >> regs[o]; 
+                if (error_number(result_instr)){
+                    printf("We can not do a shl.\n");
+                }
+                else {
+                    regs[Rbeta] = result_instr;
                 printf("Right shift : R%d and R%d in R%d\n", Ralpha, o, Rbeta);
+                }
+                
             }
             clock_rate++;
             break;
@@ -299,36 +408,78 @@ void evaluate(){
 
         case SLT:                // slt      We look for 'set lower than'
             if (immo == 1){
-                regs[Rbeta] = (regs[Ralpha] < o) ? 1 : 0;
-                printf("Set lower than : R%d and %d in R%d\n", Ralpha, o, Rbeta);
+                result_instr = ((long long int)regs[Ralpha] < o) ? 1 : 0;
+                if (error_number(result_instr)){
+                    printf("We can not do a slt.\n");
+                }
+                else {
+                    regs[Rbeta] = result_instr;
+                    printf("Set lower than : R%d and %d in R%d\n", Ralpha, o, Rbeta);
+                }
+                
             }
             else {
-                regs[Rbeta] = (regs[Ralpha] < regs[o]) ? 1 : 0;
+                result_instr = ((long long int)regs[Ralpha] < regs[o]) ? 1 : 0;
+                if (error_number(result_instr)){
+                    printf("We can not do a slt.\n");
+                }
+                else{
+                    regs[Rbeta] = result_instr;
                 printf("Set lower than : R%d and R%d in R%d\n", Ralpha, o, Rbeta);
+                }
+                
             }
             clock_rate+=2;
             break;
         
         case SLE:                // sle      We look for 'set lower equal'
             if (immo == 1){
-                regs[Rbeta] = (regs[Ralpha] <= o) ? 1 : 0;
-                printf("Set lower equal : R%d and %d in R%d\n", Ralpha, o, Rbeta);
+                result_instr = ((long long int)regs[Ralpha] <= o) ? 1 : 0;
+                if (error_number(result_instr)){
+                    printf("We can not do a sle.\n");
+                }
+                else{
+                    regs[Rbeta] = result_instr;
+                    printf("Set lower equal : R%d and %d in R%d\n", Ralpha, o, Rbeta);
+                }
+                
             }
             else {
-                regs[Rbeta] = (regs[Ralpha] <= regs[o]) ? 1 : 0;
+                result_instr = ((long long int)regs[Ralpha] <= regs[o]) ? 1 : 0;
+                if (error_number(result_instr)){
+                    printf("We can not do a sle.\n");
+                }
+                else{
+                    regs[Rbeta] = result_instr;
                 printf("Set lower equal : R%d and R%d in R%d\n", Ralpha, o, Rbeta);
+                }
+            
             }
             clock_rate+=2;
             break;
 
         case SEQ:                // seq      We look for 'set equal'
             if (immo == 1){
-                regs[Rbeta] = (regs[Ralpha] == o) ? 1 : 0;
-                printf("Set equal : R%d and %d in R%d\n", Ralpha, o, Rbeta);
+                result_instr = ((long long int)regs[Ralpha] == o) ? 1 : 0;
+                if (error_number(result_instr)){
+                    printf("We can not do a seq.\n");
+                }
+                else{
+                    regs[Rbeta] = result_instr;
+                    printf("Set equal : R%d and %d in R%d\n", Ralpha, o, Rbeta);
+                }
+                
             }
             else {
-                regs[Rbeta] = (regs[Ralpha] == regs[o]) ? 1 : 0;
+                result_instr = ((long long int)regs[Ralpha] == regs[o]) ? 1 : 0;
+                if (error_number(result_instr)){
+                    printf("We can not do a seq.\n");
+                }
+                else{
+                    regs[Rbeta] = result_instr;
                 printf("Set equal : R%d and R%d in R%d\n", Ralpha, o, Rbeta);
+                }
+                
             }
             clock_rate+=2;
             break;
@@ -342,13 +493,27 @@ void evaluate(){
         
         case LOAD:                // load
             if (immo == 1){
-                regs[Rbeta] = data[ o + regs[Ralpha]];
+                result_instr = data[ o + regs[Ralpha]];
+                if (result_instr > 31 || result_instr < 0){
+                    printf("R%lld does not exist.\n", result_instr);
+                }
+                else {
+                    regs[Rbeta] = data[ o + regs[Ralpha]];
                 printf("LOAD : load of value %d in R%d\n", data[ o + regs[Ralpha]], Rbeta);
+                }
+                
 
             }
             else{
-                regs[Rbeta] = data[regs[o] + regs[Ralpha]];
-                printf("LOAD : load of value %d in R%d\n", data[ regs[o] + regs[Ralpha]], Rbeta);
+                result_instr = data[regs[o] + regs[Ralpha]];
+                if (result_instr > 31 || result_instr < 0){
+                    printf("R%lld does not exist.\n", result_instr);
+                }
+                else {
+                    regs[Rbeta] = data[regs[o] + regs[Ralpha]];
+                    printf("LOAD : load of value %d in R%d\n", data[ regs[o] + regs[Ralpha]], Rbeta);
+                }
+                
             }
             clock_rate+=100;
             break;
@@ -368,13 +533,24 @@ void evaluate(){
         case JMP:                // jmp
             if (immo == 0){
                 regs[Rbeta] = pc;
-                pc = regs[o];
-                printf("JMP : jump from %d to %d\n", pc, regs[o]);
+                if (regs[o] < 0 || regs[o] > MAX_LIST_SIZE){
+                    printf("We can not jump on to this position because it is out of range.\n");
+                }
+                else{
+                    pc = regs[o];
+                    printf("JMP : jump from %d to %d\n", pc, regs[o]);
+                }
+                
             }
             else{
                 regs[Rbeta] = pc;
-                pc = o;
-                printf("JMP : jump from %d to %d\n", pc, o);
+                if (o < 0 || o > MAX_LIST_SIZE){
+                    printf("We can not jump on to this position because it is out of range.\n");
+                }
+                else{
+                    pc = o;
+                    printf("JMP : jump from %d to %d\n", pc, o);
+                }
             }
             clock_rate+=2;
             break;
