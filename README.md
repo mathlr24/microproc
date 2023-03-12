@@ -100,6 +100,15 @@ First you have the line to compile and execute the python file. After that you h
 
 You can modify the assembler code called "tests_codes/assembleur.txt" to change the test code.
 
+##How to change the input data? 👨🏽‍🎨
+
+If you want to, you can change the input data. On the folder "storage", you have the file data.bin. This file, has 2 parts. As you can see on this image : 
+
+<img width="116" alt="Capture d’écran 2023-03-12 à 17 36 44" src="https://user-images.githubusercontent.com/125263698/224558751-e86b7d8e-443b-4b3d-8eb6-4f700051151d.png">
+
+The left part has all the adresses. Here can write in hexadecimal the number of the register where you want to put the register. Then, the data that you want to put on your register is one the right side. You can write them in decimal with the sign. 
+
+
 
 ## Assembler program description 📝
 
