@@ -578,14 +578,15 @@ void evaluate(){
             clock_rate+=2;
             break;
         case SCALL:                // scall
-            if (a==1){
-                printf("SCALL : ");
+            if (a==0){
+                printf("Give a number : ");
                 scanf("%d", &nb_scall);
                 printf("Your value is : %d. \n", nb_scall);
+                regs[1] = nb_scall;
                 break;
             }
-            if (a==0){
-                printf("La valeur comprises dans R1 est : %d\n", regs[1]);
+            if (a==1){
+                printf("SCALL 1, The value in R1 is : %d\n", regs[1]);
                 break;
             }
             else{
@@ -599,8 +600,16 @@ void evaluate(){
     }
 
 }
+void begging(){
+    printf("/------------------------------/\n");
+    printf("/------------------------------/\n");
+    printf("/------Launch of the vm -------/\n");
+    printf("/------------------------------/\n");
+    printf("/------------------------------/\n");
+    }
 
 void run(){
+    begging();
     clock_t debut, fin;             // Variables pour compter le nombres de millions d'execution par seconde. 
     double duree;
     debut = clock();
