@@ -81,18 +81,20 @@ int fetch(){
 }
 
 
-void set_regs(){
-	regs[0] = 0;
+void set_regs() {
+    regs[0] = 0;
     if (iDdata[0] == 0) {
         regs[0] = data[0];
     }
-	for (int i=0; i<32; i++){
-        for(int j=0;j<32;j++){
-	        if (i == iDdata[j]){
-	            regs[i]=data[j];
-	        }
+    for (int i = 1; i < 32; i++) {
+        for (int j = 0; j < 32; j++) {
+            if (i == iDdata[j]) {
+                regs[i] = data[j];
+            }
         }
-   }
+       
+    }
+
 }
 
 void view_regs(){
