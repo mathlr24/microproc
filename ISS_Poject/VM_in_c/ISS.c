@@ -39,6 +39,7 @@ int iDdata[NUM_REGS];
 int nodeCount2 = 0;
 int view_registers = 1;
 int random_number=0;
+int in_game = 0;
 
 void insertMemoireInstr(int elementProg) {
     prog[nodeCount1] = elementProg;
@@ -192,7 +193,9 @@ void evaluate(){
                 }
                 else {
                     regs[Rbeta] = result_instr;
-                    printf("Addition : R%d and %d in R%d\n", Ralpha, o, Rbeta);
+                    if (!in_game){
+                        printf("Addition : R%d and %d in R%d\n", Ralpha, o, Rbeta);
+                    }
                 }
             }
 
@@ -204,7 +207,9 @@ void evaluate(){
                 }
                 else {
                     regs[Rbeta] = result_instr;
-                    printf("Addition : R%d and R%d in R%d\n", Ralpha, o, Rbeta);
+                    if (!in_game){
+                        printf("Addition : R%d and R%d in R%d\n", Ralpha, o, Rbeta);
+                    }
                 }
             }
             clock_rate++;
@@ -218,7 +223,9 @@ void evaluate(){
                 }
                 else {
                     regs[Rbeta] = result_instr;
-                    printf("Subtraction : R%d and %d in R%d\n", Ralpha, o, Rbeta);
+                    if (!in_game){
+                        printf("Subtraction : R%d and %d in R%d\n", Ralpha, o, Rbeta);
+                    }
                 }
             }
             else {
@@ -228,7 +235,9 @@ void evaluate(){
                 }
                 else {
                     regs[Rbeta] = result_instr;
-                    printf("Subtraction : R%d and R%d in R%d\n", Ralpha, o, Rbeta);
+                    if (!in_game){
+                        printf("Subtraction : R%d and R%d in R%d\n", Ralpha, o, Rbeta);
+                    }
                 }
             }
             clock_rate++;
@@ -577,7 +586,9 @@ void evaluate(){
         case BRANZ:                // branz
             if (regs[Ralpha] != 0){
                 pc = a;
-                printf("BRANZ : braz to %d\n", a);
+                if (!in_game){
+                    printf("BRANZ : braz to %d\n", a);
+                }
             }
             clock_rate+=2;
             break;
@@ -585,24 +596,27 @@ void evaluate(){
             if (a==0){
                 printf("Give a number : ");
                 scanf("%d", &nb_scall);
-                printf("Your value is : %d. \n", nb_scall);
+                if (!in_game){
+                    printf("Your value is : %d. \n", nb_scall);
+                }
                 regs[1] = nb_scall;
                 break;
             }
-            if (a == 1){
+            else if (a == 1){
                 printf("SCALL 1, The value in R1 is : %d\n", regs[1]);
                 break;
             }
-            if (a == 15){
+            else if (a == 15){
                 printf("You have selected to show registers.\n");
                 view_registers = 0;
             }
-            if (a == 30){
+            else if (a == 30){
                 printf("You have selected to do not show registers.\n");
                 view_registers = 0;
             }
-            if (a==75){
-                // view_registers = 0;
+            else if (a==75){
+                view_registers = 0;
+                in_game = 1;
                 srand(time(NULL));
                 printf("Welcome on the game give a number.\n");
                 printf("The goal of the game is to find a random number between 0 and 75. Simple no? \n");
@@ -610,8 +624,22 @@ void evaluate(){
                 random_number = rand() % 76;;
                 regs[2] = random_number;
             }
-            if (a==76){
+            else if (a==76){
                 printf("Bravo you found the right number.\n");
+            }
+            else if (a==77){
+                if (regs[1]<0){
+                    printf("It is more.\n");
+                }
+                else if (regs[1]>0){
+                    printf("It is less.\n");
+                }
+                else {
+                    printf("-------------------------------------------------\n");
+                    printf("--------------   CONGRATULATIONS   --------------\n");
+                    printf("--------------    You have won     --------------\n");
+                    printf("-------------------------------------------------\n");
+                }
             }
             else{
                 printf("This value : %d is not recognized. \n", a);
