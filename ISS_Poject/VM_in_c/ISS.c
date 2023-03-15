@@ -38,6 +38,7 @@ int data[MAX_LIST_SIZE];
 int iDdata[NUM_REGS];
 int nodeCount2 = 0;
 int view_registers = 1;
+int random_number=0;
 
 void insertMemoireInstr(int elementProg) {
     prog[nodeCount1] = elementProg;
@@ -82,20 +83,14 @@ int fetch(){
 }
 
 
-void set_regs() {
-    regs[0] = 0;
-    if (iDdata[0] == 0) {
-        regs[0] = data[0];
-    }
-    for (int i = 1; i < 32; i++) {
-        for (int j = 0; j < 32; j++) {
-            if (i == iDdata[j]) {
-                regs[i] = data[j];
-            }
+void set_regs(){
+	for (int i=0; i<32; i++){
+        for(int j=0;j<32;j++){
+	        if (i == iDdata[j]){
+	            regs[i]=data[j];
+	        }
         }
-       
-    }
-
+   }
 }
 
 void view_regs(int view_registers){
@@ -160,11 +155,11 @@ void decode(int mot) {
                     //-------------------------------------------------------//
                     //---------------                         ---------------//
                     //--------------- BRAZ AND BRANZ DECODING ---------------//
-                    //---------------                         ---------------//
+                    //---------------          SCALL          ---------------//
                     //-------------------------------------------------------//
     else if (codeop == 16 || codeop == 17){
         Ralpha = (mot & 0x07C00000) >> 22;
-        a = (mot & 0x00aFFFFF);
+        a = (mot & 0x003FFFFF);
     }
     else if (codeop == 18){
         a = (mot & 0x07FFFFFF);
@@ -605,6 +600,18 @@ void evaluate(){
             if (a == 30){
                 printf("You have selected to do not show registers.\n");
                 view_registers = 0;
+            }
+            if (a==75){
+                // view_registers = 0;
+                srand(time(NULL));
+                printf("Welcome on the game give a number.\n");
+                printf("The goal of the game is to find a random number between 0 and 75. Simple no? \n");
+                printf("Let's go.\n");
+                random_number = rand() % 76;;
+                regs[2] = random_number;
+            }
+            if (a==76){
+                printf("Bravo you found the right number.\n");
             }
             else{
                 printf("This value : %d is not recognized. \n", a);
