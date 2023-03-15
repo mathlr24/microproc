@@ -37,6 +37,7 @@ int nodeCount1 = 0;
 int data[MAX_LIST_SIZE];
 int iDdata[NUM_REGS];
 int nodeCount2 = 0;
+int view_registers = 1;
 
 void insertMemoireInstr(int elementProg) {
     prog[nodeCount1] = elementProg;
@@ -97,11 +98,13 @@ void set_regs() {
 
 }
 
-void view_regs(){
-    for (int i=0; i<32; i++){
-        printf("R%d : %d ", i, regs[i]);
+void view_regs(int view_registers){
+    if (view_registers == 1){
+        for (int i=0; i<32; i++){
+            printf("R%d : %d ", i, regs[i]);
+        }
+        printf("\n");
     }
-    printf("\n");
 }
 
 
@@ -591,12 +594,20 @@ void evaluate(){
                 regs[1] = nb_scall;
                 break;
             }
-            if (a==1){
+            if (a == 1){
                 printf("SCALL 1, The value in R1 is : %d\n", regs[1]);
                 break;
             }
+            if (a == 15){
+                printf("You have selected to show registers.\n");
+                view_registers = 0;
+            }
+            if (a == 30){
+                printf("You have selected to do not show registers.\n");
+                view_registers = 0;
+            }
             else{
-                printf("This value is not recognized. \n");
+                printf("This value : %d is not recognized. \n", a);
                 break;
             }
             clock_rate+=2;
@@ -619,15 +630,15 @@ void run(){
     clock_t debut, fin;             // Variables pour compter le nombres de millions d'execution par seconde. 
     double duree;
     debut = clock();
-    view_regs();
+    view_regs(view_registers);
     set_regs();
-    view_regs();
+    view_regs(view_registers);
     while (running)
     {
         int instr = fetch();
         decode(instr);
         evaluate();
-        view_regs();
+        view_regs(view_registers);
     }
     fin = clock();
     duree = (double)(fin - debut) / CLOCKS_PER_SEC;
