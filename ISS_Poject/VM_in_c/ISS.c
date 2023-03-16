@@ -37,7 +37,7 @@ int nodeCount1 = 0;
 int data[MAX_LIST_SIZE];
 int iDdata[NUM_REGS];
 int nodeCount2 = 0;
-int view_registers = 0;
+int view_registers = 1;
 int random_number=0;
 int in_game = 0;
 
@@ -270,7 +270,7 @@ void evaluate(){
 
         case DIV:                // Div      We do a division
             if (immo == 1){
-                result_instr = (long long int)regs[Ralpha] / o;
+                result_instr = (long long int)((long long int)regs[Ralpha] / o);
                 if (error_number(result_instr)){
                     printf("We can not do the division.\n");
                 }
@@ -280,7 +280,7 @@ void evaluate(){
                 }
             }
             else {
-                result_instr = (long long int)regs[Ralpha] / regs[o];
+                result_instr = (long long int)((long long int)regs[Ralpha] / regs[o]);
                 if (error_number(result_instr)){
                     printf("We can not do the division.\n");
                 }
