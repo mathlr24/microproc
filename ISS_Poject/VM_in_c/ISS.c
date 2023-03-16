@@ -37,7 +37,7 @@ int nodeCount1 = 0;
 int data[MAX_LIST_SIZE];
 int iDdata[NUM_REGS];
 int nodeCount2 = 0;
-int view_registers = 1;
+int view_registers = 0;
 int random_number=0;
 int in_game = 0;
 
@@ -235,7 +235,7 @@ void evaluate(){
                 }
                 else {
                     regs[Rbeta] = result_instr;
-                    if (!in_game){
+                    if (view_registers){
                         printf("Subtraction : R%d and R%d in R%d\n", Ralpha, o, Rbeta);
                     }
                 }
@@ -560,7 +560,9 @@ void evaluate(){
                 }
                 else{
                     pc = regs[o];
-                    printf("JMP : jump from %d to %d\n", pc, regs[o]);
+                    if (view_registers){
+                        printf("JMP : jump from %d to %d\n", pc, regs[o]);
+                    }
                 }
                 
             }
@@ -571,7 +573,9 @@ void evaluate(){
                 }
                 else{
                     pc = o;
-                    printf("JMP : jump from %d to %d\n", pc, o);
+                    if(view_registers){
+                        printf("JMP : jump from %d to %d\n", pc, o);
+                    }
                 }
             }
             clock_rate+=2;
@@ -582,6 +586,7 @@ void evaluate(){
                 pc = a;
                 printf("BRAZ : braz to %d\n", a);
             }
+            clock_rate+=1;
             break;
         case BRANZ:                // branz
             if (regs[Ralpha] != 0){
@@ -677,9 +682,9 @@ void run(){
     }
     fin = clock();
     duree = (double)(fin - debut) / CLOCKS_PER_SEC;
-    double ops_par_sec = (double)clock_rate / duree; // Calcule les opérations par seconde
+    double ops_par_sec = ((double)clock_rate / duree) / 1000000; // Calcule les opérations par seconde
     printf("Le programme a pris %.2f secondes et a effectue %ld operations.\n", duree, clock_rate);
-    printf("Number of clock_rate : %.2f\n", ops_par_sec);
+    printf("MIPS: %.2f\n", ops_par_sec);
 }
 
 
