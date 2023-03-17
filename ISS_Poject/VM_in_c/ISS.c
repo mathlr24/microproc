@@ -270,23 +270,33 @@ void evaluate(){
 
         case DIV:                // Div      We do a division
             if (immo == 1){
-                result_instr = (long long int)((long long int)regs[Ralpha] / o);
-                if (error_number(result_instr)){
-                    printf("We can not do the division.\n");
+                if(o == 0){
+                    printf("We cannot divide by 0.\n");
                 }
-                else {
-                    regs[Rbeta] = result_instr;
-                    printf("Division : R%d by %d in R%d\n", Ralpha, o, Rbeta);
+                else{
+                    result_instr = (long long int)((long long int)regs[Ralpha] / o);
+                    if (error_number(result_instr)){
+                        printf("We can not do the division.\n");
+                    }
+                    else {
+                        regs[Rbeta] = result_instr;
+                        printf("Division : R%d by %d in R%d\n", Ralpha, o, Rbeta);
+                    }
                 }
             }
             else {
-                result_instr = (long long int)((long long int)regs[Ralpha] / regs[o]);
-                if (error_number(result_instr)){
-                    printf("We can not do the division.\n");
+                if(o == 0){
+                    printf("We cannot divide by 0.\n");
                 }
-                else {
-                    regs[Rbeta] = result_instr;
-                    printf("Division : R%d by R%d in R%d\n", Ralpha, o, Rbeta);
+                else{
+                    result_instr = (long long int)((long long int)regs[Ralpha] / regs[o]);
+                    if (error_number(result_instr)){
+                        printf("We can not do the division.\n");
+                    }
+                    else {
+                        regs[Rbeta] = result_instr;
+                        printf("Division : R%d by R%d in R%d\n", Ralpha, o, Rbeta);
+                    }
                 }
                 
             }
