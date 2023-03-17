@@ -285,7 +285,7 @@ void evaluate(){
                 }
             }
             else {
-                if(o == 0){
+                if(regs[o] == 0){
                     printf("We cannot divide by 0.\n");
                 }
                 else{
