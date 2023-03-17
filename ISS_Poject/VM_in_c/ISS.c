@@ -682,27 +682,18 @@ void run(){
     debut = clock();
     view_regs(view_registers);
     //set_regs();
-    view_regs(view_registers);
-    for (int j=1; j<32;j++){
-        regs[j-1] = j;
+    for (int i =0; i<31; i++){
+        regs[i] = i+1;
     }
-    for (int i = 0; i<18;i++){
-        printf("%d : %d | ",i,data[i]);
-    }
-    printf("\n");
-    view_regs(view_registers);
     while (running)
     {
         int instr = fetch();
         decode(instr);
+        printf("\n");
         evaluate();
         view_regs(view_registers);
     }
-    for (int i = 0; i<18;i++){
-        printf("%d : %d | ",i,data[i]);
-    }
     printf("\n");
-    view_regs(!view_registers);
     fin = clock();
     duree = (double)(fin - debut) / CLOCKS_PER_SEC;
     double ops_par_sec = ((double)clock_rate / duree) / 1000000; // Calcule les opérations par seconde
