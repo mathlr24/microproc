@@ -1,0 +1,46 @@
+#This code is about testing all the opcodes
+
+TestingAdd:  add r0, 1, r2
+ add r0, r0, r0
+
+TestingSub:  sub r1, 1, r1	    
+sub r1, r1, r1
+
+TestingMul:  mul r2, 2, r2
+mul r2, r2, r2
+
+TestingDiv:  div r3, 3, r3
+div r3, r0, r3
+
+TestingAnd:  and r4, 3, r4
+and r4, r4, r4
+
+TestingOr:   or r5, 5, r5
+or r5, r5, r5
+
+TestingXor:  xor r6, 6, r6
+xor r6, r6, r6
+
+TestingShl:  shl r7, 2, r7
+shl r7, r0, r7
+
+TestingShr:  shr r8, 2, r8
+shr r8, r0, r8
+
+TestingSlt:  slt r9, 9, r9
+slt r9, r9, r9
+
+TestingSle:  sle r10, 10, r10
+sle r10, r10, r10
+
+TestingSeq:  seq r11, 11, r11
+seq r11, r11, r11
+
+#TestingLoad: load r0,2,r12
+#load r0,r2,r12
+
+#TestingStore: store r13, 0, r0
+#store r12, r0, r0
+
+
+
