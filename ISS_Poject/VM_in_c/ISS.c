@@ -608,7 +608,7 @@ void evaluate(){
             clock_rate+=2;
             break;
         case SCALL:                // scall
-            if (a==0){
+            if (a==0){ // Rentrer une valeur dans R1
                 printf("Give a number : ");
                 scanf("%d", &nb_scall);
                 if (!in_game){
@@ -617,19 +617,19 @@ void evaluate(){
                 regs[1] = nb_scall;
                 break;
             }
-            else if (a == 1){
+            else if (a == 1){ // Afficher la valeur dans R1
                 printf("SCALL 1, The value in R1 is : %d\n", regs[1]);
                 break;
             }
-            else if (a == 15){
+            else if (a == 15){ // Montrer les registres
                 printf("You have selected to show registers.\n");
                 view_registers = 0;
             }
-            else if (a == 30){
+            else if (a == 30){ // Ne pas montrer les registres
                 printf("You have selected to do not show registers.\n");
                 view_registers = 0;
             }
-            else if (a==75){
+            else if (a==75){ // Initialisation du jeu give a number 
                 view_registers = 0;
                 in_game = 1;
                 srand(time(NULL));
@@ -639,10 +639,10 @@ void evaluate(){
                 random_number = rand() % 76;;
                 regs[2] = random_number;
             }
-            else if (a==76){
+            else if (a==76){   // Victoire V1 pour give a number
                 printf("Bravo you found the right number.\n");
             }
-            else if (a==77){
+            else if (a==77){  // Victoire V2 pour give a number
                 if (regs[1]<0){
                     printf("It is more.\n");
                 }
@@ -654,6 +654,11 @@ void evaluate(){
                     printf("--------------   CONGRATULATIONS   --------------\n");
                     printf("--------------    You have won     --------------\n");
                     printf("-------------------------------------------------\n");
+                }
+            }
+            else if (a==24){  // Show datas
+                for (int i = 0; i< MAX_LIST_SIZE;i++){
+                    printf("%d || ",data[i]);
                 }
             }
             else{
