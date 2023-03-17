@@ -286,6 +286,7 @@ void evaluate(){
             }
             else {
                 if(regs[o] == 0){
+                
                     printf("We cannot divide by 0.\n");
                 }
                 else{
@@ -525,8 +526,7 @@ void evaluate(){
         
         case LOAD:                // load
             if (immo == 1){
-                result_instr = data[ o + regs[Ralpha]];
-                if (result_instr > 31 || result_instr < 0){
+                if (regs[Rbeta] > 31 || regs[Rbeta] < 0){
                     printf("R%lld does not exist.\n", result_instr);
                 }
                 else {
@@ -542,7 +542,7 @@ void evaluate(){
                     printf("R%lld does not exist.\n", result_instr);
                 }
                 else {
-                    regs[Rbeta] = data[regs[o] + regs[Ralpha]];
+                    regs[Rbeta] = result_instr;
                     printf("LOAD : load of value %d in R%d\n", data[ regs[o] + regs[Ralpha]], Rbeta);
                 }
                 
@@ -681,7 +681,15 @@ void run(){
     double duree;
     debut = clock();
     view_regs(view_registers);
-    set_regs();
+    //set_regs();
+    view_regs(view_registers);
+    for (int j=1; j<32;j++){
+        regs[j-1] = j;
+    }
+    for (int i = 0; i<18;i++){
+        printf("%d : %d | ",i,data[i]);
+    }
+    printf("\n");
     view_regs(view_registers);
     while (running)
     {
@@ -690,6 +698,11 @@ void run(){
         evaluate();
         view_regs(view_registers);
     }
+    for (int i = 0; i<18;i++){
+        printf("%d : %d | ",i,data[i]);
+    }
+    printf("\n");
+    view_regs(!view_registers);
     fin = clock();
     duree = (double)(fin - debut) / CLOCKS_PER_SEC;
     double ops_par_sec = ((double)clock_rate / duree) / 1000000; // Calcule les opérations par seconde
