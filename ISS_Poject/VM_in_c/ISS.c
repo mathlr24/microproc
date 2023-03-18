@@ -40,6 +40,8 @@ int nodeCount2 = 0;
 int view_registers = 1;
 int random_number=0;
 int in_game = 0;
+int view_braz=1;
+int fibo=0;
 
 void insertMemoireInstr(int elementProg) {
     prog[nodeCount1] = elementProg;
@@ -206,11 +208,12 @@ void evaluate(){
                 }
                 else {
                     regs[Rbeta] = result_instr;
-                    if (!in_game){
+                    if (!in_game ){
                         printf("Addition : R%d and R%d in R%d\n", Ralpha, o, Rbeta);
                     }
                 }
             }
+            view_regs(view_registers);
             clock_rate++;
             break;
             
@@ -239,6 +242,7 @@ void evaluate(){
                     }
                 }
             }
+            view_regs(view_registers);
             clock_rate++;
             break;
 
@@ -264,6 +268,7 @@ void evaluate(){
                     printf("Multiplication : R%d and R%d in R%d\n", Ralpha, o, Rbeta);
                 }            
             }
+            view_regs(view_registers);
             clock_rate+=2;
             break;
 
@@ -300,6 +305,7 @@ void evaluate(){
                 }
                 
             }
+            view_regs(view_registers);
             clock_rate+=2;
             break;
 
@@ -325,6 +331,7 @@ void evaluate(){
                 }
                 
             }
+            view_regs(view_registers);
             clock_rate++;
             break;
 
@@ -351,6 +358,7 @@ void evaluate(){
                 }
                 
             }
+            view_regs(view_registers);
             clock_rate++;
             break;
 
@@ -377,6 +385,7 @@ void evaluate(){
                 }
                 
             }
+            view_regs(view_registers);
             clock_rate++;
             break;
 
@@ -403,6 +412,7 @@ void evaluate(){
                 }
                 
             }
+            view_regs(view_registers);
             clock_rate++;
             break;
 
@@ -429,6 +439,7 @@ void evaluate(){
                 }
                 
             }
+            view_regs(view_registers);
             clock_rate++;
             break;
                     //-------------------------------------------------------//
@@ -461,6 +472,7 @@ void evaluate(){
                 }
                 
             }
+            view_regs(view_registers);
             clock_rate+=2;
             break;
         
@@ -487,6 +499,7 @@ void evaluate(){
                 }
             
             }
+            view_regs(view_registers);
             clock_rate+=2;
             break;
 
@@ -513,6 +526,7 @@ void evaluate(){
                 }
                 
             }
+            view_regs(view_registers);
             clock_rate+=2;
             break;
 
@@ -546,6 +560,7 @@ void evaluate(){
                 }
                 
             }
+            view_regs(view_registers);
             clock_rate+=100;
             break;
         case STORE:                // store
@@ -558,6 +573,7 @@ void evaluate(){
                 printf("STORE : Store of value of R%d in memory case : %d\n",Rbeta, regs[o] + regs[Ralpha]);
 
             }
+            view_regs(view_registers);
             clock_rate +=100;
             break;
             
@@ -593,7 +609,9 @@ void evaluate(){
         case BRAZ:                // braz
             if (regs[Ralpha] == 0){
                 pc = a;
-                printf("BRAZ : braz to %d\n", a);
+                if (view_braz){
+                    printf("BRAZ : braz to %d\n", a);
+                }
             }
             clock_rate+=1;
             break;
@@ -611,13 +629,19 @@ void evaluate(){
                 printf("Give a number : ");
                 scanf("%d", &nb_scall);
                 if (!in_game){
-                    printf("Your value is : %d. \n", nb_scall);
+                    printf("\nYour value is : %d. \n", nb_scall);
                 }
                 regs[1] = nb_scall;
                 break;
             }
             else if (a == 1){ // Afficher la valeur dans R1
-                printf("SCALL 1, The value in R1 is : %d\n", regs[1]);
+                if (fibo){
+                    printf("%d",regs[1]);
+                }
+                else {
+                    printf("SCALL 1, The value in R1 is : %d\n", regs[1]);
+                }
+                
                 break;
             }
             else if (a == 15){ // Montrer les registres
@@ -655,6 +679,27 @@ void evaluate(){
                     printf("-------------------------------------------------\n");
                 }
             }
+            else if (a==20){
+                printf("Welcome to the calculation of the first elements of the Fibonacci sequence .\n");
+                view_braz = 0;
+                fibo = 1;
+                in_game =1;
+            }
+            else if (a==21){
+                printf("Enter a number between 1000 and 3.\n");
+            }
+            else if (a==22){
+                printf("This number is good.\n");
+            }
+            else if (a==23){
+                printf("F(");
+            }
+            else if (a == 25){
+                printf(")=");
+            }
+            else if (a==26){
+                printf("\n");
+            }
             else if (a==24){  // Show datas
                 for (int i = 0; i< MAX_LIST_SIZE;i++){
                     printf("%d || ",data[i]);
@@ -686,16 +731,15 @@ void run(){
     debut = clock();
     view_regs(view_registers);
     //set_regs();
-    for (int i =0; i<31; i++){
-        regs[i] = i+1;
-    }
+    //for (int i =0; i<31; i++){
+      //  regs[i] = i+1;
+    //}
     while (running)
     {
         int instr = fetch();
         decode(instr);
-        printf("\n");
         evaluate();
-        view_regs(view_registers);
+        //view_regs(view_registers);
     }
     printf("\n");
     fin = clock();
