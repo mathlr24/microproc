@@ -740,6 +740,7 @@ int main(int argc, char *argv[]) {
     for (int i =0; i<10; i++){
         printf("%d : %d || ", i, data[i]);
     }
+    printf("\n");
     if (argc != 3) {
         printf("Usage: %s <filename1> <filename2>\n", argv[0]);
         return 1;
@@ -761,14 +762,14 @@ int main(int argc, char *argv[]) {
     }
     
     insertionMemoire(fp1,fp2);
-    affichageMemoireStockee();
+    // affichageMemoireStockee(); 
 
     run();
 
     for (int i =0; i<10; i++){
         printf("%d : %d || ", i, data[i]);
     }
-
+    printf("\n");
     fclose(fp1);
     fclose(fp2);
     return 0;
