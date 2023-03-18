@@ -46,9 +46,8 @@ void insertMemoireInstr(int elementProg) {
     nodeCount1++;
 }
 
-void insertMemoireData(unsigned int elementIDdata, unsigned int elementData) {
-    iDdata[nodeCount2] = elementIDdata;
-    data[nodeCount2] = elementData;
+void insertMemoireData(unsigned int elementIDdata, int elementData) {
+    data[elementIDdata] = elementData;
     nodeCount2++;
 }
 
@@ -738,6 +737,9 @@ void affichageMemoireStockee(){
 
 
 int main(int argc, char *argv[]) {
+    for (int i =0; i<10; i++){
+        printf("%d : %d || ", i, data[i]);
+    }
     if (argc != 3) {
         printf("Usage: %s <filename1> <filename2>\n", argv[0]);
         return 1;
@@ -762,7 +764,11 @@ int main(int argc, char *argv[]) {
     affichageMemoireStockee();
 
     run();
-    
+
+    for (int i =0; i<10; i++){
+        printf("%d : %d || ", i, data[i]);
+    }
+
     fclose(fp1);
     fclose(fp2);
     return 0;
