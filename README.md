@@ -112,7 +112,22 @@ The left part has all the adresses. Here can write in hexadecimal the number of 
 
 ## Assembler program description 📝
 
-code 
+Based on the code provided, the goal of the program seems to be to read an assembly language code from a file, parse it, convert each instruction into its corresponding hexadecimal code, and then output the hexadecimal code into another file. The program also  handle the conversion of different types of operands  into their binary representations before converting them into hexadecimal codes.
+
+The first part of the code reads the command line arguments to get the input and output file names. The output_hex_instructions function writes the machine code to the output file.
+
+The decToBin function converts a decimal value to a binary string with the specified number of bits.
+
+The operandList dictionary maps each keyword in the assembly language to a unique integer opcode.
+
+The code then reads the input file line by line, removes comments and detects labels. It stores the label names and their positions in separate lists.
+
+It then iterates over each instruction in the assembly code and converts it to machine code using different conversion logic for each instruction type. The resulting machine code is appended to a list hexaList.
+
+Finally, the resulting machine code is written to the output file using the output_hex_instructions function. The format of the machine code seems to be a fixed-length binary string with a 5-bit opcode followed by a variable number of arguments encoded in binary.
+
+Overall, the code is quite complex and could benefit from more documentation and comments to help understand its logic.
+
 
 ## VM in C program description 🔖
 This is the part where we will describe the C code. 
