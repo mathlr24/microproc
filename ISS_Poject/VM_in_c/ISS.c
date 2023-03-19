@@ -901,7 +901,7 @@ void evaluate(){
     }
 
 }
-void begging(){
+void beging(){
         printf("/------------------------------/\n");
         printf("/------------------------------/\n");
         printf("/------Launch of the vm -------/\n");
@@ -910,7 +910,7 @@ void begging(){
     }
 
 void run(){
-    //begging();
+    beging();
     clock_t debut, fin;             // Variables pour compter le nombres de millions d'execution par seconde. 
     double duree;
     debut = clock();
