@@ -1,6 +1,0 @@
-#!/bin/bash
-python3 translator.py
-gcc -o main main.c
-./main fichier_traduit.bin data.bin
-
-#Script pour lancer l'ensemble du programme.
