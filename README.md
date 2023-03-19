@@ -4,7 +4,6 @@
 You will find in this folder our code for the digital architectures course.
 
 
-
 ## 🚀 About the devs
 We are 2 students from ENSTA_Bretagne an engineering school in France. We are doing our studies in the field of embedded systems. 
 We are currently in the second year of our engineering school. 
@@ -61,52 +60,76 @@ Just like the assembly program, we will detail this program in a next part.
 ## Tests
 As any program, our code needed to be tested. That is why we decides to do 4 differents tests. The are all availables in the folder "Tests". 
 
-To write our tests we wanted to do 4 different things. 
+To write our tests we wanted to do 6 different things. 
 
-First, we wanted to show that all the instructions were well coded. To do this, we wrote an assembly code in which all the basic functions are used with positive and negative numbers. We also wanted to show on this test that we make sure that the maximum and minimum limits are not exceeded. Indeed, as we have a 32 bits processor, we have limits concerning the maximum and minimum numbers. The numbers are signed, so the maximum is 2^31 - 1 = 2.147.483.647 and -2^31 = 2.147.483.648. The most significant bit is used to give the sign.
+<img width="791" alt="Capture d’écran 2023-03-19 à 22 22 22" src="https://user-images.githubusercontent.com/125263698/226210479-19efd7df-923b-40ca-9b09-812e083cec00.png">
+
+
+First, we wanted to show that all the instructions were well coded. To do this, we wrote an assembly code in which all the basic functions are used with positive and negative numbers. We also wanted to show on this test that we make sure that the maximum and minimum limits are not exceeded. Indeed, as we have a 32 bits processor, we have limits concerning the maximum and minimum numbers. The numbers are signed, so the maximum is 2^31 - 1 = 2.147.483.647 and -2^31 = 2.147.483.648. The most significant bit is used to give the sign. This code uses launch_all.sh. 
+
+The second : launch_current.sh is the program that takes care of launching the assembler file. It can allow you to put the code of your choice. Be careful, you must write your comments with a # and write your instructions in lower case. 
+
+The third : launch_fibo.sh is a program that launches the fibonacci sequence. It can be used until the 46th iteration. After that, the values are not representable on 32 bits in signed. F(0) and F(1) are stored in the file data_suite.bin.
+
+The fourth : launch_MIPS.sh is a program that launches the MIPS calculation. (Million operations per second). To get the most accurate result you can comment out the begin function at line 913 of the .c code. 
+
+The fifth one: launch_number.sh is a game where you have to guess a randomly generated number between 0 and 75. 
+
+The sixth: launch_petits_chevaux is a game of small horses. We don't have time to finalize it completely but it is still functional. Indeed, we programmed the game for only 1 player and we did not optimize the display of the game (the position of the pawn is indicated by 1 instead of X).
+
+The seventh: launch_syracuse.sh is a program from the syracuse suite.
+
+
 
 
 ## How to use our code 🛠️
 
-We have chosen to organize our files by family and by language. That is why you will find 4 folders and 1 .txt file. 
+We have chosen to organize our files by family and by language. That is why you will find 5 folders. 
 
-The first folder is where the python assembler program is. The second is the folder where the VM called ISS is located. The third one is the storage. There you will find the binary files. The fourth folder is where the test codes are. Finally, the last folder will be the executive file.
+The first folder is where the python assembler program is. The second is the folder where the VM called ISS is located. The third one is the storage. There you will find the binary files. The fourth folder is where the test codes are. Finally, the last folder will be the executive files.
 
 Here is a picture of the folder you will have. 
 
-<img width="538" alt="Capture d’écran 2023-03-11 à 23 18 29" src="https://user-images.githubusercontent.com/125263698/224513872-ebe09ca5-37d7-4fc7-b8e1-ee1a46ea1f84.png">
+<img width="547" alt="Capture d’écran 2023-03-19 à 22 15 32" src="https://user-images.githubusercontent.com/125263698/226210152-8d72b4a3-e6d7-4088-909d-7f872706ffe3.png">
 
-HOW TO USE THE LAUNCH_APP.SH FILE ? 
+Here is the folder with all the executives codes.
 
-There is what you have in this file : 
+<img width="798" alt="Capture d’écran 2023-03-19 à 22 16 05" src="https://user-images.githubusercontent.com/125263698/226210165-0bfd156f-0829-4ccf-9617-4726574ab4a1.png">
+
+
+HOW TO USE one LAUNCH_[..].SH FILE ? 
+
+There is what you could have in one of those files : 
 
 
 ```console
 #!/bin/bash
-
-#Compilation of the python code. The first parameter is the name of the python code, 
-#then the name of the assembly code to be tested and finally the .bin file where to write the instructions. 
-python3 assembler_code/translator.py tests_codes/assembleur.txt storage/fichier_traduit.bin
-
-#Compilation of the VM in C 
+cd ..
+python3 assembler_code/translator.py tests_codes/number.txt storage/traduced_file.bin
 gcc -o VM_in_c/ISS VM_in_c/ISS.c
+./VM_in_c/ISS storage/traduced_file.bin storage/data.bin
 
-#Execution of the VM. The first parameter is the name of the VM executable. The second is the name 
-#of the .bin file with instructions and the last is the .bin file with data.
-./VM_in_c/ISS storage/fichier_traduit.bin storage/data.bin
+#Script pour lancer l'ensemble du programme.
+
 ```
 
 First you have the line to compile and execute the python file. After that you have the line to compile the C program and to finish you have the line to execute the C file. 
 
-You can modify the assembler code called "tests_codes/assembleur.txt" to change the test code.
+You can modify the assembler code called "tests_codes/number.txt" to change the test code.
+
+You can also change the input data by changing the file storage/data.bin.
+However, the advantage of having several .sh files is to be able to launch each program with the corresponding memory independently. 
+
 
 ## How to change the input data? 👨🏽‍🎨
 
 If you want to, you can change the input data. On the folder "storage", you have the file data.bin. This file, has 2 parts. As you can see on this image : 
 
-<img width="116" alt="Capture d’écran 2023-03-12 à 17 36 44" src="https://user-images.githubusercontent.com/125263698/224558751-e86b7d8e-443b-4b3d-8eb6-4f700051151d.png">
+<img width="162" alt="Capture d’écran 2023-03-19 à 22 13 58" src="https://user-images.githubusercontent.com/125263698/226210084-2ab6d0de-b75e-49e7-b8f6-da7e9fd2efdb.png">
 
-The left part has all the adresses. Here can write in hexadecimal the number of the register where you want to put the register. Then, the data that you want to put on your register is one the right side. You can write them in decimal with the sign. 
+
+
+The left part has all the adresses. Here can write in hexadecimal the number of the register where you want to put the register. Then, the data that you want to put on your register is one the right side. You can write them in hexadecimal. 
 
 
 
