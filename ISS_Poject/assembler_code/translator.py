@@ -1,3 +1,5 @@
+#Translator from assmbler to bin 
+
 import sys
 
 if len(sys.argv) > 1:
@@ -10,10 +12,10 @@ def output_hex_instructions(hexaIDlist, hexInstructions, fileName):
         outputFile.write(hexaIDlist[i] + ' ' + hexInstructions[i] + '\n')
     
     
-#Decimal -> binary conversion function
+#Fonction de conversion décimal -> binaire
 def decToBin(decVal,nbBit): return (lambda x : ''.join(reversed([str((x >> i) & 1) for i in range(nbBit)])))(decVal)
 
-#List of possible instructions
+#Liste des keyword possibles
 operandList={"add":1,"sub":2,"mul":3,"div":4,
              "and":5,"or":6,"xor":7,
              "shl":8,"shr":9,"slt":10,"sle":11,"seq":12,
@@ -21,10 +23,10 @@ operandList={"add":1,"sub":2,"mul":3,"div":4,
              "braz":16,"branz":17,"scall":18,
              "stop":0}
 
-#Reading the ASM code
+#Lecture du code ASM
 with open(inputFileName,'r') as instruFile: instruData=instruFile.read().split("\n")
 
-
+#Clean de chaque ligne et repérage de chaque label
 position=0
 labelList,posList=[],[]
 for i in range(len(instruData)):
@@ -33,26 +35,26 @@ for i in range(len(instruData)):
     if "#" in data: data=data.split("#")[0] #Si commentaire : on prend tout avant le marqueur
     instruData[i] = data
 
-    #DETECTION OF LABEL
-    if ':' in data: #label detected
-        currentLabel=data.split(':')[0].replace(' ','') #Removal of all spaces before the marker
-        if '#' in currentLabel: break #Remove of the labels
+    #DETECTION DE LABEL
+    if ':' in data: #label détecté
+        currentLabel=data.split(':')[0].replace(' ','') #Suppression de tous les espaces avant le marqueur
+        if '#' in currentLabel: break #Le label est un commentaire : on skip
         labelList.append(currentLabel)
         posList.append(position)
-        data=data.split(":")[1] #Take the instruction after the label if it exists
+        data=data.split(":")[1] #On prend l'instruction après le label si existe
         instruData[i]=data
 
-    if len(data)==0: continue 
+    if len(data)==0: continue #Si plus de donnée : tchao bye bye
 
-    #DETECTION OF INSTRUCTION
-    while data[0]==" ": #Deletion of each space before the first character
+    #DETECTION D'INSTRUCTION
+    while data[0]==" ": #Suppression de chaque espace avant premier caractère
         data=data[1:]
         if len(data)==0: break
     instruData[i]=data
-    if len(data)<=1: continue #If no word found: we go to the next one
-    if data.split(' ')[0] in operandList: position+=1 #Instruction found: one line is counted
+    if len(data)<=1: continue #Si aucun mot trouvé : on passe à la suivante
+    if data.split(' ')[0] in operandList: position+=1 #Instruction trouvée : on compte une ligne
 
-for i in range(len(labelList)): print(labelList[i],"-",posList[i])
+#for i in range(len(labelList)): print(labelList[i],"-",posList[i])     # It is a helper that displays the labels 
 
 instruData = [i for i in instruData if i!= ""] #Remove all empty lines remaining in the list
 
@@ -100,7 +102,6 @@ for data in instruData:
         else: b2=int(values[1])
         R,a=decToBin(b1,5),decToBin(b2,22)
         fullCode=codeop+R+a
-        
 
     else:
         #instr|rAlph|i|       o        |rBeta
@@ -118,7 +119,6 @@ for data in instruData:
         else :
             valeur = int(values[2][1:])
         b4=valeur #Third argument always a register
-        
 
         Ralpha,imm,o,Rbeta=decToBin(b1,5),decToBin(b2,1),decToBin(b3,16),decToBin(b4,5)
         fullCode=codeop+Ralpha+imm+o+Rbeta
@@ -126,20 +126,19 @@ for data in instruData:
     hexaCode = hex(int(fullCode,2))
     while len(hexaCode)<10: hexaCode="0x"+"0"+hexaCode[2:]
 
-   
+    #Ligne ajoutée avec succès
     hexaList.append(hexaCode)
 
-#Display of final values (contained in hexaList) :
+#Affichage des valeurs finales (contenues dans hexaList) :
 decVal=0
 listHexaID=[]
 for hexa in hexaList:
     hexaID=hex(decVal)
     while len(hexaID)<10: hexaID="0x"+"0"+hexaID[2:]
     listHexaID.append(hexaID)
-    print(hexaID,hexa)
+    # print(hexaID,hexa)            #This line is a help. It allows to know the hexadecimal writing of the instructions 
     decVal+=1
     
     
 output_hex_instructions(listHexaID, hexaList, outputFileName)
-
 

@@ -7,7 +7,7 @@ Init: load r0,0,r2      #On initialise le premier à 0
 
 Maximum: scall 21	#Preciser les bornes 
          scall 0        #Give a number between 3 and maximum
-         slt r1,1000,r5
+         sle r1,46,r5
          braz r5, Maximum
          sle r8,r1,r5
          braz r5, Maximum

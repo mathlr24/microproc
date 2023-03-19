@@ -1,0 +1,83 @@
+start: scall 40                 #Initialisation du jeu
+       scall 30
+
+Nb_joueurs: scall 41            #Demande un ou deux joueurs 
+            scall 0
+            add r1,0,r2
+            sub r2,1,r2
+            braz r2,Un_joueur
+            sub r2,1,r2
+            braz r2,Deux_joueurs
+            jmp Nb_joueurs,r10
+
+Un_joueur: add r6,0,r3
+           scall 42             #Voulez vous lancer 
+           scall 0              #Entrer 1 pour oui 0 pour non 
+           braz r1,Loop_end
+           scall 43
+           add r3,r5,r6
+           add r6,0,r7
+           sub r7,40,r7
+           braz r7,Final_Loop_1_player_1
+           slt r7,r0,r8
+           branz r8,Un_joueur
+           add r0,40,r3
+           jmp Final_Loop_1_player_1,r10
+
+Final_Loop_1_player_1: scall 44             #Voulez vous lancer 
+                       scall 0              #Entrer 1 pour oui 0 pour non 
+                       add r0,40,r3
+                       braz r1,Loop_end
+                       scall 43
+                       add r3,r5,r6
+                       add r6,0,r7
+                       sub r7,41,r7
+                       branz r7,Final_Loop_1_player_1
+
+Final_Loop_1_player_2: add r0,r6,r3
+                       scall 45             #Voulez vous lancer 
+                       scall 0              #Entrer 1 pour oui 0 pour non 
+                       braz r1,Loop_end
+                       scall 43
+                       add r3,r5,r6
+                       add r6,0,r7
+                       sub r7,42,r7
+                       branz r7,Final_Loop_1_player_2
+
+Final_Loop_1_player_3: add r0,r6,r3
+                       scall 46             #Voulez vous lancer 
+                       scall 0              #Entrer 1 pour oui 0 pour non 
+                       braz r1,Loop_end
+                       scall 43
+                       add r3,r5,r6
+                       add r6,0,r7
+                       sub r7,43,r7
+                       branz r7,Final_Loop_1_player_3
+
+Final_Loop_1_player_4: add r0,r6,r3
+                       scall 47             #Voulez vous lancer 
+                       scall 0              #Entrer 1 pour oui 0 pour non 
+                       braz r1,Loop_end
+                       scall 43
+                       add r3,r5,r6
+                       add r6,0,r7
+                       sub r7,44,r7
+                       branz r7,Final_Loop_1_player_4
+
+Final_Loop_1_player_5: add r0,r6,r3
+                       scall 48             #Voulez vous lancer 
+                       scall 0              #Entrer 1 pour oui 0 pour non 
+                       braz r1,Loop_end
+                       scall 43
+                       add r3,r5,r6
+                       add r6,0,r7
+                       sub r7,45,r7
+                       branz r7,Final_Loop_1_player_5
+                       add r0,r6,r3
+ 
+
+
+Deux_joueurs: scall 49
+stop
+
+Loop_end:stop                #Vous souhaitez arreter le jeu

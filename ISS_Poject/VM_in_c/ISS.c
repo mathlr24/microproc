@@ -29,6 +29,97 @@
 # define nb_max 2147483647
 # define nb_min -2147483648
 
+int tableau[11][11] = { {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+                        {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1},
+                        {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1},
+                        {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1},
+                        {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1},
+                        {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+                        {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1},
+                        {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1},
+                        {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1},
+                        {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1},
+                        {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+                        };
+void afficherTableau(){
+    for (int i=0; i<11;i++){
+        for (int j=0; j<11;j++){
+            if(tableau[i][j]==1){
+                printf("X ");
+            }
+            else if(tableau[i][j]==0){
+                printf("  ");
+            }
+            else if(tableau[i][j]==2){
+                printf("1 ");
+            }
+            else if(tableau[i][j]==3){
+                printf("2 ");
+            }
+        }
+        printf("\n");
+    }
+}
+
+
+void position1(int pos){
+    int tmp=0;
+    int i = 0;
+    int j = 0;
+    if (pos == 0){i=10;j=5;}
+    else if (pos == 1){i=10;j=4;}
+    else if (pos == 2){i=10;j=3;}
+    else if (pos == 3){i=10;j=2;}
+    else if (pos == 4){i=10;j=1;}
+    else if (pos == 5){i=10;j=0;}
+    else if (pos == 6){i=9;j=0;}
+    else if (pos == 7){i=8;j=0;}
+    else if (pos == 8){i=7;j=0;}
+    else if (pos == 9){i=6;j=0;}
+    else if (pos == 10){i=5;j=0;}
+    else if (pos == 11){i=4;j=0;}
+    else if (pos == 12){i=3;j=0;}
+    else if (pos == 13){i=2;j=0;}
+    else if (pos == 14){i=1;j=0;}
+    else if (pos == 15){i=0;j=0;}
+    else if (pos == 16){i=0;j=1;}
+    else if (pos == 17){i=0;j=2;}
+    else if (pos == 18){i=0;j=3;}
+    else if (pos == 19){i=0;j=4;}
+    else if (pos == 20){i=0;j=5;}
+    else if (pos == 21){i=0;j=6;}
+    else if (pos == 22){i=0;j=7;}
+    else if (pos == 23){i=0;j=8;}
+    else if (pos == 24){i=0;j=9;}
+    else if (pos == 25){i=0;j=10;}
+    else if (pos == 26){i=1;j=10;}
+    else if (pos == 27){i=2;j=10;}
+    else if (pos == 28){i=3;j=10;}
+    else if (pos == 29){i=4;j=10;}
+    else if (pos == 30){i=5;j=10;}
+    else if (pos == 31){i=6;j=10;}
+    else if (pos == 32){i=7;j=10;}
+    else if (pos == 33){i=8;j=10;}
+    else if (pos == 34){i=9;j=10;}
+    else if (pos == 35){i=10;j=10;}
+    else if (pos == 36){i=10;j=9;}
+    else if (pos == 37){i=10;j=8;}
+    else if (pos == 38){i=10;j=7;}
+    else if (pos == 39){i=10;j=6;}
+    else if (pos == 40){i=10;j=5;}
+    else if (pos == 41){i=9;j=5;}
+    else if (pos == 42){i=8;j=5;}
+    else if (pos == 43){i=7;j=5;}
+    else if (pos == 44){i=6;j=5;}
+    else if (pos == 45){i=5;j=5;}
+    tmp=tableau[i][j];
+    tableau[i][j]=2;
+    afficherTableau();
+    tableau[i][j]=tmp;
+}
+
+
+
 
 
 int regs[ NUM_REGS ];
@@ -174,7 +265,7 @@ void evaluate(){
     long long int result_instr = 0;
     switch (codeop) {
         case STOP:                 // HALT     We stop the program
-            printf("HALT, end of the program\n");
+            printf("\nHALT, end of the program\n");
             running = 0;
             break;
 
@@ -254,7 +345,9 @@ void evaluate(){
                 }
                 else {
                     regs[Rbeta] = result_instr;
-                    printf("Multiplication : R%d and %d in R%d\n", Ralpha, o, Rbeta);
+                    if (!in_game){
+                        printf("Multiplication : R%d and %d in R%d\n", Ralpha, o, Rbeta);
+                    }
                 }
                 
             }
@@ -265,7 +358,9 @@ void evaluate(){
                 }
                 else {
                     regs[Rbeta] = result_instr;
-                    printf("Multiplication : R%d and R%d in R%d\n", Ralpha, o, Rbeta);
+                    if (!in_game){
+                        printf("Multiplication : R%d and R%d in R%d\n", Ralpha, o, Rbeta);
+                    }
                 }            
             }
             view_regs(view_registers);
@@ -284,7 +379,9 @@ void evaluate(){
                     }
                     else {
                         regs[Rbeta] = result_instr;
-                        printf("Division : R%d by %d in R%d\n", Ralpha, o, Rbeta);
+                        if (!in_game){
+                            printf("Division : R%d by %d in R%d\n", Ralpha, o, Rbeta);
+                        }
                     }
                 }
             }
@@ -300,7 +397,9 @@ void evaluate(){
                     }
                     else {
                         regs[Rbeta] = result_instr;
-                        printf("Division : R%d by R%d in R%d\n", Ralpha, o, Rbeta);
+                        if (!in_game){
+                            printf("Division : R%d by R%d in R%d\n", Ralpha, o, Rbeta);
+                        }
                     }
                 }
                 
@@ -457,7 +556,9 @@ void evaluate(){
                 }
                 else {
                     regs[Rbeta] = result_instr;
-                    printf("Set lower than : R%d and %d in R%d\n", Ralpha, o, Rbeta);
+                    if (!in_game){
+                        printf("Set lower than : R%d and %d in R%d\n", Ralpha, o, Rbeta);
+                    }
                 }
                 
             }
@@ -468,7 +569,9 @@ void evaluate(){
                 }
                 else{
                     regs[Rbeta] = result_instr;
-                printf("Set lower than : R%d and R%d in R%d\n", Ralpha, o, Rbeta);
+                    if (!in_game){
+                        printf("Set lower than : R%d and R%d in R%d\n", Ralpha, o, Rbeta);
+                    }
                 }
                 
             }
@@ -544,7 +647,9 @@ void evaluate(){
                 }
                 else {
                     regs[Rbeta] = data[ o + regs[Ralpha]];
-                printf("LOAD : load of value %d in R%d\n", data[ o + regs[Ralpha]], Rbeta);
+                    if (view_registers){
+                        printf("LOAD : load of value %d in R%d\n", data[ o + regs[Ralpha]], Rbeta);
+                    }
                 }
                 
 
@@ -556,7 +661,9 @@ void evaluate(){
                 }
                 else {
                     regs[Rbeta] = result_instr;
-                    printf("LOAD : load of value %d in R%d\n", data[ regs[o] + regs[Ralpha]], Rbeta);
+                    if (view_registers){
+                        printf("LOAD : load of value %d in R%d\n", data[ regs[o] + regs[Ralpha]], Rbeta);
+                    }
                 }
                 
             }
@@ -639,10 +746,22 @@ void evaluate(){
                     printf("%d",regs[1]);
                 }
                 else {
-                    printf("SCALL 1, The value in R1 is : %d\n", regs[1]);
+                    if(in_game){
+                        printf("%d ",regs[1]);
+                    }
+                    else if(!in_game){
+                        printf("SCALL 1, The value in R1 is : %d\n", regs[1]);
+                    }
                 }
                 
                 break;
+            }
+            else if (a==2){
+                view_registers=0;
+                view_braz=0;
+                in_game=1;
+                regs[3]=2147483647;
+                regs[2]=1;
             }
             else if (a == 15){ // Montrer les registres
                 printf("You have selected to show registers.\n");
@@ -655,6 +774,7 @@ void evaluate(){
             else if (a==75){ // Initialisation du jeu give a number 
                 view_registers = 0;
                 in_game = 1;
+                view_braz = 0;
                 srand(time(NULL));
                 printf("Welcome on the game give a number.\n");
                 printf("The goal of the game is to find a random number between 0 and 75. Simple no? \n");
@@ -662,22 +782,18 @@ void evaluate(){
                 random_number = rand() % 76;;
                 regs[2] = random_number;
             }
+            else if (a==78){   // Victoire V1 pour give a number
+                printf("\nC'est plus.\n\n");
+            }
             else if (a==76){   // Victoire V1 pour give a number
-                printf("Bravo you found the right number.\n");
+                printf("\nC'est moins.\n\n");
             }
             else if (a==77){  // Victoire V2 pour give a number
-                if (regs[1]<0){
-                    printf("It is more.\n");
-                }
-                else if (regs[1]>0){
-                    printf("It is less.\n");
-                }
-                else {
+                    printf("\nYou have done %d trials.\n\n",regs[20]);
                     printf("-------------------------------------------------\n");
                     printf("--------------   CONGRATULATIONS   --------------\n");
                     printf("--------------    You have won     --------------\n");
                     printf("-------------------------------------------------\n");
-                }
             }
             else if (a==20){
                 printf("Welcome to the calculation of the first elements of the Fibonacci sequence .\n");
@@ -686,10 +802,11 @@ void evaluate(){
                 in_game =1;
             }
             else if (a==21){
-                printf("Enter a number between 1000 and 3.\n");
+                printf("Enter a number between 46 and 3.\n");
             }
             else if (a==22){
                 printf("This number is good.\n");
+                printf("F(O)=%d\nF(1)=%d\nF(2)=%d\n",regs[2],regs[3],regs[2]+regs[3]);
             }
             else if (a==23){
                 printf("F(");
@@ -705,6 +822,74 @@ void evaluate(){
                     printf("%d || ",data[i]);
                 }
             }
+            else if (a==50){
+                printf("Syracuse Suite.\n\n");
+                in_game = 1;
+                view_braz=0;
+            }
+            else if (a==40){
+                printf("Bienvenue dans le jeu des petits chevaux.\n");
+                in_game=1;
+                view_braz=0;
+            }
+            else if(a==41){
+                printf("Rentrer le nombre de joueurs : 1 ou 2.\n");
+            }
+            else if(a==42){
+                position1(regs[3]);
+                printf("Your position : %d\n",regs[3]);
+                printf("Voulez vous lancer le de ?\n");
+                
+            }
+            else if(a==43){
+                srand(time(NULL));
+                random_number = rand() % 6 + 1;;
+                regs[5] = random_number;
+                printf("Value : %d\n\n",random_number);
+            }
+            else if(a==44){
+                system("cls");
+                printf("Vous devez faire 1 pour avancer.\n");
+                position1(regs[3]);
+                printf("Your position : %d\n",regs[3]);
+                printf("Voulez vous avancer ?\n");
+            }
+            else if(a==45){
+                system("cls");
+                printf("Vous devez faire 2 pour avancer.\n");
+                position1(regs[3]);
+                printf("Your position : %d\n",regs[3]);
+                printf("Voulez vous avancer ?\n");
+            }
+            else if(a==46){
+                system("cls");
+                printf("Vous devez faire 3 pour avancer.\n");
+                position1(regs[3]);
+                printf("Your position : %d\n",regs[3]);
+                printf("Voulez vous avancer ?\n");
+            }
+            else if(a==47){
+                system("cls");
+                printf("Vous devez faire 4 pour avancer.\n");
+                position1(regs[3]);
+                printf("Your position : %d\n",regs[3]);
+                printf("Voulez vous avancer ?\n");
+            }
+            else if(a==48){
+                system("cls");
+                printf("Vous devez faire 5 pour avancer.\n");
+                position1(regs[3]);
+                printf("Your position : %d\n",regs[3]);
+                printf("Voulez vous avancer ?\n");
+            }
+            else if(a==49){
+                position1(regs[3]);
+                printf("-------------------------------------------------\n");
+                printf("--------------   CONGRATULATIONS   --------------\n");
+                printf("--------------    You have won     --------------\n");
+                printf("-------------------------------------------------\n");
+            }
+
             else{
                 printf("This value : %d is not recognized. \n", a);
                 break;
@@ -717,29 +902,23 @@ void evaluate(){
 
 }
 void begging(){
-    printf("/------------------------------/\n");
-    printf("/------------------------------/\n");
-    printf("/------Launch of the vm -------/\n");
-    printf("/------------------------------/\n");
-    printf("/------------------------------/\n");
+        printf("/------------------------------/\n");
+        printf("/------------------------------/\n");
+        printf("/------Launch of the vm -------/\n");
+        printf("/------------------------------/\n");
+        printf("/------------------------------/\n");
     }
 
 void run(){
-    begging();
+    //begging();
     clock_t debut, fin;             // Variables pour compter le nombres de millions d'execution par seconde. 
     double duree;
     debut = clock();
-    view_regs(view_registers);
-    //set_regs();
-    //for (int i =0; i<31; i++){
-      //  regs[i] = i+1;
-    //}
     while (running)
     {
         int instr = fetch();
         decode(instr);
         evaluate();
-        //view_regs(view_registers);
     }
     printf("\n");
     fin = clock();
@@ -781,9 +960,9 @@ void affichageMemoireStockee(){
 
 
 int main(int argc, char *argv[]) {
-    for (int i =0; i<10; i++){
-        printf("%d : %d || ", i, data[i]);
-    }
+    //for (int i =0; i<10; i++){
+      //  printf("%d : %d || ", i, data[i]);
+    //}
     printf("\n");
     if (argc != 3) {
         printf("Usage: %s <filename1> <filename2>\n", argv[0]);
@@ -810,9 +989,9 @@ int main(int argc, char *argv[]) {
 
     run();
 
-    for (int i =0; i<10; i++){
-        printf("%d : %d || ", i, data[i]);
-    }
+    //for (int i =0; i<10; i++){
+      //  printf("%d : %d || ", i, data[i]);
+    //}
     printf("\n");
     fclose(fp1);
     fclose(fp2);

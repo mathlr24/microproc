@@ -1,0 +1,7 @@
+Start: scall 2
+
+Loop: sub r3,r2,r3 
+      braz r3, Loop_end
+      jmp Loop,r4
+
+Loop_end:stop
