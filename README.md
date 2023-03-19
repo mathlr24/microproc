@@ -295,8 +295,7 @@ All the code has been commented out, so we won't describe every line. The goal h
 First of all, as we said before, the first thing to do is read the file "traduced_file". It is in this file, that we have all the binary instructions. 
 
 
-JE TE LAISSE EXPLIQUER CETTE PARTIE JE NE LA COMPREND PAS BIEN. 
-L'intérêt à mon sens c'est simplement de dire ce que tu fais grossièrement pour lire les instructions et les mettre dans le tableau prog[]. 
+The code reads two file names from command-line arguments, attempts to open and read from both files using the fopen() function, and assigns FILE pointers fp1 and fp2 to them. If either file could not be opened, an error message is printed to the console and the program returns with an error code of 1. If both files were successfully opened, the program can proceed with reading data from them.
 
 
 Once the instructions are arranged in the table, we must now decode them. To do that, we have used the diagram proposed by the teacher. 
