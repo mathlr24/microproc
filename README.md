@@ -71,7 +71,7 @@ The second : launch_current.sh is the program that takes care of launching the a
 
 The third : launch_fibo.sh is a program that launches the fibonacci sequence. It can be used until the 46th iteration. After that, the values are not representable on 32 bits in signed. F(0) and F(1) are stored in the file data_suite.bin.
 
-The fourth : launch_MIPS.sh is a program that launches the MIPS calculation. (Million operations per second). To get the most accurate result you can comment out the begin function at line 913 of the .c code. 
+The fourth : launch_MIPS.sh is a program that launches the MIPS calculation. (Million operations per second). To get the most accurate result you can follow the instructions on commented on lines 910 and around of the .c code. 
 
 The fifth one: launch_number.sh is a game where you have to guess a randomly generated number between 0 and 75. 
 
