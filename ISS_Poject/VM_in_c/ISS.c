@@ -264,7 +264,6 @@ void evaluate(){
     long long int result_instr = 0;
     switch (codeop) {
         case STOP:                 // HALT     We stop the program
-            printf("\nHALT, end of the program\n");
             running = 0;
             break;
 
@@ -829,50 +828,40 @@ void evaluate(){
             }
             else if(a==42){
                 position1(regs[3]);
-                printf("Your position : %d\n",regs[3]);
-                printf("Voulez vous lancer le de ?\n");
+                printf("Voulez vous lancer le de ? 1 pour oui, 0 pour non\n");
                 
             }
             else if(a==43){
                 srand(time(NULL));
                 random_number = rand() % 6 + 1;;
                 regs[5] = random_number;
-                printf("Value : %d\n\n",random_number);
+                system("clear");
+                printf("Lancé du dé : %d\n\n",random_number);
             }
             else if(a==44){
-                system("cls");
                 printf("Vous devez faire 1 pour avancer.\n");
                 position1(regs[3]);
-                printf("Your position : %d\n",regs[3]);
-                printf("Voulez vous avancer ?\n");
+                printf("Voulez vous avancer ? 1 pour oui, 0 pour non\n");
             }
             else if(a==45){
-                system("cls");
                 printf("Vous devez faire 2 pour avancer.\n");
                 position1(regs[3]);
-                printf("Your position : %d\n",regs[3]);
-                printf("Voulez vous avancer ?\n");
+                printf("Voulez vous avancer ? 1 pour oui, 0 pour non\n");
             }
             else if(a==46){
-                system("cls");
                 printf("Vous devez faire 3 pour avancer.\n");
                 position1(regs[3]);
-                printf("Your position : %d\n",regs[3]);
-                printf("Voulez vous avancer ?\n");
+                printf("Voulez vous avancer ? 1 pour oui, 0 pour non\n");
             }
             else if(a==47){
-                system("cls");
                 printf("Vous devez faire 4 pour avancer.\n");
                 position1(regs[3]);
-                printf("Your position : %d\n",regs[3]);
-                printf("Voulez vous avancer ?\n");
+                printf("Voulez vous avancer ? 1 pour oui, 0 pour non\n");
             }
             else if(a==48){
-                system("cls");
                 printf("Vous devez faire 5 pour avancer.\n");
                 position1(regs[3]);
-                printf("Your position : %d\n",regs[3]);
-                printf("Voulez vous avancer ?\n");
+                printf("Voulez vous avancer ? 1 pour oui, 0 pour non\n");
             }
             else if(a==49){
                 position1(regs[3]);
@@ -902,12 +891,12 @@ void beging(){
     }
 
 void run(){
-    beging();			//comment for MIPS calculation
-    //view_registers=0;		//decomment for MIPS calculation
-    //view_braz=0;		//decomment for MIPS calculation
-    //in_game=1;		//decomment for MIPS calculation
-    //regs[3]=2147483647;	//decomment for MIPS calculation
-    //regs[2]=1;		//decomment for MIPS calculation
+    //beging();
+    view_registers=0;
+    view_braz=0;
+    in_game=1;
+    regs[3]=2147483647;
+    regs[2]=1;
     clock_t debut, fin;             // Variables pour compter le nombres de millions d'execution par seconde. 
     double duree;
     debut = clock();
