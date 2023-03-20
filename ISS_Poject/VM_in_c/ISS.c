@@ -759,7 +759,6 @@ void evaluate(){
                 view_registers = 0;
             }
             else if (a == 30){ // Ne pas montrer les registres
-                printf("You have selected to do not show registers.\n");
                 view_registers = 0;
             }
             else if (a==75){ // Initialisation du jeu give a number 
