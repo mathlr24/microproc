@@ -53,10 +53,6 @@ Just like the assembly program, we will detail this program in a next part.
 
 
 
-
-
-
-
 ## Tests
 As any program, our code needed to be tested. That is why we decides to do 4 differents tests. The are all availables in the folder "Tests". 
 
@@ -67,7 +63,7 @@ To write our tests we wanted to do 6 different things.
 
 First, we wanted to show that all the instructions were well coded. To do this, we wrote an assembly code in which all the basic functions are used with positive and negative numbers. We also wanted to show on this test that we make sure that the maximum and minimum limits are not exceeded. Indeed, as we have a 32 bits processor, we have limits concerning the maximum and minimum numbers. The numbers are signed, so the maximum is 2^31 - 1 = 2.147.483.647 and -2^31 = 2.147.483.648. The most significant bit is used to give the sign. This code uses launch_all.sh. 
 
-The second : launch_current.sh is the program that takes care of launching the assembler file. It can allow you to put the code of your choice. Be careful, you must write your comments with a # and write your instructions in lower case. 
+The second : launch_current.sh is the program that takes care of launching the assembler file of your choice. This file, allows to launch a program according to the arguments of your choice. That is, you must launch the file by executing the file of the kind ./launch_current.sh assembler_file.txt data_file.bin. It can allow you to put the code of your choice. Be careful, you must write your comments with a # and write your instructions in lower case. 
 
 The third : launch_fibo.sh is a program that launches the fibonacci sequence. It can be used until the 46th iteration. After that, the values are not representable on 32 bits in signed. F(0) and F(1) are stored in the file data_suite.bin.
 
