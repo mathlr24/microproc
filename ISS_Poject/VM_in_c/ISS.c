@@ -28,7 +28,7 @@
 
 # define nb_max 2147483647
 # define nb_min -2147483648
-
+//table for the game of small horses 
 int tableau[11][11] = { {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
                         {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1},
                         {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1},
@@ -41,6 +41,7 @@ int tableau[11][11] = { {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
                         {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1},
                         {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
                         };
+//Function that displays the table of the little horses game.
 void afficherTableau(){
     for (int i=0; i<11;i++){
         for (int j=0; j<11;j++){
@@ -61,7 +62,7 @@ void afficherTableau(){
     }
 }
 
-
+//Function that calculates the position in the table of the game of small horses according to an integer. 
 void position1(int pos){
     int tmp=0;
     int i = 0;
@@ -120,8 +121,6 @@ void position1(int pos){
 
 
 
-
-
 int regs[ NUM_REGS ];
 int prog[MAX_LIST_SIZE];
 int nodeCount1 = 0;
@@ -176,7 +175,7 @@ int fetch(){
 }
 
 
-void set_regs(){
+void set_regs(){ // This function was for our tests
 	for (int i=0; i<32; i++){
         for(int j=0;j<32;j++){
 	        if (i == iDdata[j]){
@@ -756,13 +755,6 @@ void evaluate(){
                 
                 break;
             }
-            else if (a==2){
-                view_registers=0;
-                view_braz=0;
-                in_game=1;
-                regs[3]=2147483647;
-                regs[2]=1;
-            }
             else if (a == 15){ // Montrer les registres
                 printf("You have selected to show registers.\n");
                 view_registers = 0;
@@ -910,7 +902,12 @@ void beging(){
     }
 
 void run(){
-    beging();
+    beging();			//comment for MIPS calculation
+    //view_registers=0;		//decomment for MIPS calculation
+    //view_braz=0;		//decomment for MIPS calculation
+    //in_game=1;		//decomment for MIPS calculation
+    //regs[3]=2147483647;	//decomment for MIPS calculation
+    //regs[2]=1;		//decomment for MIPS calculation
     clock_t debut, fin;             // Variables pour compter le nombres de millions d'execution par seconde. 
     double duree;
     debut = clock();
